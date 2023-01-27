@@ -11,7 +11,8 @@ class Card(db.Model):
     number = db.Column(db.String)
     suit = db.Column(db.String)
     value = db.Column(db.Integer)
-    is_selected = db.Column(db.Boolean)
+    card_art = db.Column(db.String)
+    is_selected = db.Column(db.Boolean, default=False)
     deck_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('default_deck.id')))
     
     #relationships
@@ -25,6 +26,7 @@ class Card(db.Model):
            'number': self.number,
            'suit': self.suit,
            'value': self.value,
+           'cardArt': self.card_art, 
            'isSelected': self.is_selected,
            'deckId': self.deck_id
         }

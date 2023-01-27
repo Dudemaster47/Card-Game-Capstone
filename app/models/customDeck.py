@@ -10,7 +10,7 @@ class CustomDeck(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     deck_name = db.Column(db.String(20), nullable=False)
     card_art = db.Column(db.String, nullable=False)
-    is_selected = db.Column(db.Boolean)
+    is_selected = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')))
     
     #relationships

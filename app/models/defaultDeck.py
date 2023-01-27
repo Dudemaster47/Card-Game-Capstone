@@ -9,7 +9,7 @@ class DefaultDeck(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     card_art = db.Column(db.String)
-    is_selected = db.Column(db.Boolean)
+    is_selected = db.Column(db.Boolean, default=False)
     
     #relationships
     deck_cards = db.relationship('Card', back_populates='default_deck', cascade = 'all, delete')

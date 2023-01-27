@@ -1,6 +1,8 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from playerDefaultDeck import player_default_deck
+from playerGame import player_game
 
 
 class User(db.Model, UserMixin):
@@ -13,6 +15,14 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
+    profile_img = db.Column(db.String)
+    
+    #relationships
+    user_decks = db.relationship('CustomDeck', back_populates='user', cascade = 'all, delete')
+    default_deck = db.relationship('DefaultDeck', secondary=player_default_deck, back_populates = 'all_players', cascade='all,delete')
+    games = db.relationship('Game', secondary=player_game, back_populates = 'game_players', cascade='all,delete')
+    
+    #gameSession
 
     @property
     def password(self):
@@ -29,5 +39,9 @@ class User(db.Model, UserMixin):
         return {
             'id': self.id,
             'username': self.username,
-            'email': self.email
+            'email': self.email,
+            'decks': [deck.to_dict() for deck in self.user_decks],
+            'defaultDeck': [deck.to_dict() for deck in self.default_deck],
+            'profileImg': self.profile_img,
+            'game': [game.to_dict() for game in self.games]
         }

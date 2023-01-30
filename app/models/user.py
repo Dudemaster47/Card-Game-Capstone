@@ -20,9 +20,9 @@ class User(db.Model, UserMixin):
     #relationships
     user_decks = db.relationship('CustomDeck', back_populates='user', cascade = 'all, delete')
     default_deck = db.relationship('DefaultDeck', secondary=player_default_deck, back_populates = 'all_players', cascade='all,delete')
-    games = db.relationship('Game', secondary=player_game, back_populates = 'game_players', cascade='all,delete')
+    joinedGames = db.relationship('Game', secondary=player_game, back_populates = 'game_players', cascade='all,delete')
+    createdGames = db.relationship('Game', back_populates = 'user_games', cascade = 'all, delete')
     
-    #gameSession
 
     @property
     def password(self):
@@ -43,5 +43,6 @@ class User(db.Model, UserMixin):
             'decks': [deck.to_dict() for deck in self.user_decks],
             'defaultDeck': [deck.to_dict() for deck in self.default_deck],
             'profileImg': self.profile_img,
-            'game': [game.to_dict() for game in self.games]
+            'joinedGames': [game.to_dict() for game in self.joinedGames],
+            'createdGames': [game.to_dict() for game in self.createdGames],
         }

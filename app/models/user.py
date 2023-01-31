@@ -16,6 +16,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
     profile_img = db.Column(db.String)
+    wins = db.Column(db.Integer)
+    losses = db.Column(db.Integer)
     
     #relationships
     user_decks = db.relationship('CustomDeck', back_populates='user', cascade = 'all, delete')
@@ -45,4 +47,6 @@ class User(db.Model, UserMixin):
             'profileImg': self.profile_img,
             'joinedGames': [game.to_dict() for game in self.joinedGames],
             'createdGames': [game.to_dict() for game in self.createdGames],
+            'wins': self.wins,
+            'losses': self.losses
         }

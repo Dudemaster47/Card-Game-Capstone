@@ -4,5 +4,6 @@ from wtforms.validators import DataRequired, ValidationError, URL, Length,InputR
 from app.models import Game
 
 class GameForm(FlaskForm):
+    user_id = IntegerField('userId', validators=[DataRequired()])
     time_limit = IntegerField('timeLimit', validators=[DataRequired()])
-    game_type = StringField('gameType', validators=[DataRequired])
+    game_type = StringField('gameType', validators=[DataRequired()])

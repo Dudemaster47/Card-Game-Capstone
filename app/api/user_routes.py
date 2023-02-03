@@ -55,7 +55,7 @@ def edit_user(id):
 @user_routes.route('/<int:id>', methods = ["DELETE"])
 @login_required
 def delete_user(id):
-    User = User.query.get(id)
+    user = User.query.get(id)
 
     if user.id != current_user.id:
         return {'error': "You are not authorized to delete this profile"}, 401
@@ -68,11 +68,12 @@ def delete_user(id):
 #Get all Custom Decks by user id
 @user_routes.route('/<int:id>/decks')
 @login_required
-def user(id):
+def user_decks(id):
     """
     Query for a user by id and returns that user in a dictionary
     """
     user = User.query.get(id)
-    decks = user.user_decks.query.get()
+    decks = user.user_decks
+
     
     return {'decks': [deck.to_dict() for deck in decks]}

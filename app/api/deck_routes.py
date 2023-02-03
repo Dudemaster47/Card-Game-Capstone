@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
-from app.models import DefaultDeck, CustomDeck, db
+from app.models import DefaultDeck, CustomDeck, Card, db
 from app.forms import CustomDeckForm, DeckSelectorForm
+# from app.seeds import card_list
 
 deck_routes = Blueprint('decks', __name__)
 
@@ -18,31 +19,17 @@ def validation_errors_to_error_messages(validation_errors):
 #Get the Default Deck
 @deck_routes.route('')
 def get_default_deck():
-    deck = DefaultDeck.query.all()
-
-    res = {deck.id: deck.to_dict()}
- 
+    deck = DefaultDeck.query.get(1)
+    res = {"deck": deck.to_dict()}
     return res
 
-
-
 #Get a Custom Deck by id
-@deck_routes.route('/<int:id>', methods = ["PATCH", "PUT"])
-@login_required
-def edit_product(id):
+@deck_routes.route('/<int:id>')
+def get_deck_by_id(id):
     deck = CustomDeck.query.get(id)
-    form = CustomDeckForm()
- 
-    if form.data["user_id"] != current_user.id:
-        return {'error': "You are not authorized to edit this deck"}, 401
 
-    form['csrf_token'].data = request.cookies['csrf_token']
-    if form.validate_on_submit():
-        form.populate_obj(deck)
-
-        db.session.commit()
-        return {deck.id: deck.to_dict()}
-    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+    res = {deck.id: deck.to_dict()}
+    return res
 
 #Post a Custom Deck
 @deck_routes.route('',methods=['POST'])
@@ -53,7 +40,10 @@ def  add_deck():
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         deck = CustomDeck()
+        cards = Card.query.all()
         form.populate_obj(deck)
+        deck.cards_in_deck.extend(cards)
+        # query for all cards
 
         db.session.add(deck)
         db.session.commit()
@@ -66,42 +56,6 @@ def  add_deck():
 def edit_deck(id):
     deck = CustomDeck.query.get(id)
     form = CustomDeckForm()
- 
-    if form.data["user_id"] != current_user.id:
-        return {'error': "You are not authorized to edit this deck"}, 401
-
-    form['csrf_token'].data = request.cookies['csrf_token']
-    if form.validate_on_submit():
-        form.populate_obj(deck)
-
-        db.session.commit()
-        return {deck.id: deck.to_dict()}
-    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
-
-#Select a Deck (Default)
-@deck_routes.route('/<int:id>', methods = ["PATCH", "PUT"])
-@login_required
-def edit_deck(id):
-    deck = DefaultDeck.query.get(id)
-    form = DeckSelectorForm()
- 
-    if form.data["user_id"] != current_user.id:
-        return {'error': "You are not authorized to edit this deck"}, 401
-
-    form['csrf_token'].data = request.cookies['csrf_token']
-    if form.validate_on_submit():
-        form.populate_obj(deck)
-
-        db.session.commit()
-        return {deck.id: deck.to_dict()}
-    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
-
-#Select a Deck (Custom)
-@deck_routes.route('/<int:id>', methods = ["PATCH", "PUT"])
-@login_required
-def edit_deck(id):
-    deck = CustomDeck.query.get(id)
-    form = DeckSelectorForm()
  
     if form.data["user_id"] != current_user.id:
         return {'error': "You are not authorized to edit this deck"}, 401

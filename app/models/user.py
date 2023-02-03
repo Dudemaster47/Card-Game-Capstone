@@ -1,8 +1,6 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from playerDefaultDeck import player_default_deck
-from playerGame import player_game
 
 
 class User(db.Model, UserMixin):
@@ -16,14 +14,15 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
     profile_img = db.Column(db.String)
-    wins = db.Column(db.Integer)
-    losses = db.Column(db.Integer)
+    wins = db.Column(db.Integer, default=0)
+    losses = db.Column(db.Integer, default=0)
+    deck_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('default_deck.id')), default=1)
+
     
     #relationships
     user_decks = db.relationship('CustomDeck', back_populates='user', cascade = 'all, delete')
-    default_deck = db.relationship('DefaultDeck', secondary=player_default_deck, back_populates = 'all_players', cascade='all,delete')
-    joinedGames = db.relationship('Game', secondary=player_game, back_populates = 'game_players', cascade='all,delete')
-    createdGames = db.relationship('Game', back_populates = 'user_games', cascade = 'all, delete')
+    default_deck = db.relationship('DefaultDeck', back_populates = 'all_players')
+    created_games = db.relationship('Game', back_populates = 'player_1', cascade = 'all, delete')
     
 
     @property
@@ -43,10 +42,19 @@ class User(db.Model, UserMixin):
             'username': self.username,
             'email': self.email,
             'decks': [deck.to_dict() for deck in self.user_decks],
-            'defaultDeck': [deck.to_dict() for deck in self.default_deck],
+            'defaultDeck': self.default_deck.to_dict(),
             'profileImg': self.profile_img,
-            'joinedGames': [game.to_dict() for game in self.joinedGames],
-            'createdGames': [game.to_dict() for game in self.createdGames],
+            'createdGames': [game.to_dict() for game in self.created_games],
+            'wins': self.wins,
+            'losses': self.losses
+        }
+
+    def to_dict_basic(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'profileImg': self.profile_img,
             'wins': self.wins,
             'losses': self.losses
         }

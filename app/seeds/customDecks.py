@@ -1,10 +1,12 @@
 from app.models import db, CustomDeck, environment, SCHEMA
+from .cards import card_list
 
 def seed_custom_decks():
-    metroidDeck = CustomDeck(deck_name="Metroid Deck", card_art="https://freepngimg.com/download/symbol/91742-prime-metroid-brand-trademark-returns-samus.png", user_id=2)
-    marioDeck = CustomDeck(deck_name="Mario Deck", card_art="https://static.wikia.nocookie.net/mario/images/7/7a/1208px-Mushroom2.png/revision/latest/scale-to-width-down/1208?cb=20190607181634", user_id=3)
-
+    metroidDeck = CustomDeck(deck_name="Metroid Deck", card_art="https://freepngimg.com/download/symbol/91742-prime-metroid-brand-trademark-returns-samus.png", cards_in_deck=card_list, user_id=2)
     db.session.add(metroidDeck)
+    db.session.commit()
+    
+    marioDeck = CustomDeck(deck_name="Mario Deck", card_art="https://static.wikia.nocookie.net/mario/images/7/7a/1208px-Mushroom2.png/revision/latest/scale-to-width-down/1208?cb=20190607181634", cards_in_deck=card_list, user_id=3)
     db.session.add(marioDeck)
     db.session.commit()
     

@@ -1,5 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-from cardDeck import card_decks
+from .cardDeck import card_decks
 
 class Card(db.Model):
     __tablename__ = 'cards'
@@ -12,7 +12,6 @@ class Card(db.Model):
     suit = db.Column(db.String)
     value = db.Column(db.Integer)
     card_art = db.Column(db.String)
-    is_selected = db.Column(db.Boolean, default=False)
     deck_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('default_deck.id')))
     
     #relationships
@@ -27,6 +26,5 @@ class Card(db.Model):
            'suit': self.suit,
            'value': self.value,
            'cardArt': self.card_art, 
-           'isSelected': self.is_selected,
            'deckId': self.deck_id
         }

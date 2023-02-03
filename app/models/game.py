@@ -1,5 +1,4 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-from playerGame import player_game
 
 class Game(db.Model):
     __tablename__ = 'games'
@@ -13,8 +12,7 @@ class Game(db.Model):
     game_type = db.Column(db.String, default="War", nullable=False)
     
     #relationship
-    user_games = db.relationship('User', back_populates = 'games')
-    game_players = db.relationship('User', secondary=player_game, back_populates = 'game_players', cascade='all,delete')
+    player_1 = db.relationship('User', back_populates = 'created_games')
 
     
     def to_dict(self):
@@ -23,5 +21,4 @@ class Game(db.Model):
             'userId': self.user_id,
             'timeLimit': self.timer,
             'gameType': self.game_type,
-            'players': [player.to_dict() for player in self.game_players]
         }

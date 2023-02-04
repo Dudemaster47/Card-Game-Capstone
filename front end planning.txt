@@ -1,0 +1,146 @@
+CARD GAME FRONT END
+
+HOME PAGE:
+
+Nav Bar:
+[SIGN UP  LOG IN] or [LOG OUT] depending on if you're logged in or not.
+CARD GAME APP title, not a link
+PROFILE LINK
+RESUME GAME IN PROGRESS (if applicable)
+
+Home Page:
+
+TITLE: CARD GAMES!!
+IMAGE: Logo, Hand
+
+IF NOT LOGGED IN:
+"This is Card Games!! To continue, please SIGN UP (link), LOG IN (link), or CONTINUE AS GUEST (link) 
+Link: SIGN UP
+Link: LOG IN
+Link: GUEST LOG IN
+
+
+IF LOGGED IN AND A GAME HAS NOT YET BEEN CREATED OR JOINED:
+
+BUTTON: CREATE A GAME
+BUTTON: JOIN A GAME
+If Applicable, instead: RESUME GAME IN PROGRESS
+
+(JOIN A GAME brings up an alert window that says "Not Yet Implemented!")
+
+
+IF LOGGED IN AND THE CREATE A GAME BUTTON IS PRESSED WHILE THE USER HAS NO GAMES CREATED OR THE USER HAS AN EXISTING GAME ROOM:
+
+Alert Window: "A Game Room has been made for you! Its ID is {currentUser.createdGame.Id}." (on creation) [THERE IS NO FORM INVOLVED IN GAME CREATION.]
+
+Under Logo: "Game ID: {currentUser.createdGame.Id}"
+
+BUTTON: 1P GAME (Appears for WAR and potentially BLACKJACK gametype only)
+BUTTON: 2P GAME (Brings up alert window that says "Not Yet Implemented!")
+BUTTON: GAME SETTINGS
+BUTTON: DELETE GAME
+
+1P Game brings you to the game room and begins a game of War against a computer.
+
+2P Game's functionality will be determined once it is time to begin implementing Multiplayer. Current idea (0 research): Brings up modal to give the Game Room a name and an optional passcode, with JOIN A GAME being a search for existing games. Then it will tell you it's hosting and let you know when someone else has joined your room, then after some confirmation will let you start playing.
+
+Delete Game deletes the game room. Kinda obvious. 
+
+
+GAME SETTINGS MODAL: 
+Game Settings brings up a Modal that allows you to modify the values for the game. For now it allows modification of:
+	GAME TIMER (number input): default value of 300 seconds
+	GAME TYPE: (Select menu): default value of War. 
+
+Game Type includes Gin Rummy on the menu, but selecting it will bring up an alert that says "Not Yet Implemented!" If more time is added, Blackjack will also be considered.
+
+
+
+USER PROFILE PAGE: (only accessible when logged in)
+TITLE: {User.username}'s Profile!
+On Left Side Corner: {User.profileImg}
+
+WHEN LOGGED IN AS GUEST: only Title and Profile Image are visible.
+
+On Right Side Corner: USER STATS COMPONENT
+
+Bottom Half: DECK SELECTOR
+
+3/4 Deck Components per line. Starts with the Default Deck, then begins listing custom decks. 
+
+Uses State to determine which deck is currently selected for use by the player. By default, the state value "isSelected" is TRUE for the Default Deck and FALSE for all other decks. Only one deck can have isSelected: TRUE at any given time, and selecting a different deck sets this value to FALSE for the currently selected deck.
+
+*** Deck information and Hand information should be tied to the Session, as it must be unique to the user - this is especially the case for the default deck! ***
+
+
+USER STATS COMPONENT:
+Wins: {user.wins}
+Losses: {user.losses}
+
+Not Yet Implemented Values:
+
+Games of War Played: ???
+Games of Gin Rummy Played: ???
+Lifetime Points: ???
+Current Points: ???
+
+
+
+DECK COMPONENT:
+Really it's just a div displaying the deck art on the back, proportioned like a playing card. Displays the name of the deck underneath.
+
+UNSURE IF DEFAULT DECK AND CUSTOM DECK NEED DIFFERENT COMPONENTS?
+
+
+
+GAME PAGE:
+remember PixiJS? Time to do some research because that's gonna be rendering our field.
+
+Difficult to plan further rn without research but!!!
+
+FOR WAR:
+
+TIMER COMPONENT: Displays the Game timer counting down. When that time reaches 0, the game ends and a winner is announced.
+
+CANVAS - displays Deck (uses the deck component from earlier) and a Card component for both sides. Possibly also a "winnings" component that acts as a discard pile. Discard pile displays size, and will be shuffled and placed into the Hand state whenever the Hand is empty. 
+
+BUTTONS:
+TAKE YOUR TURN - Progresses the turn order
+PAUSE GAME - Pauses the game timer, but disallows use of the take your turn button.
+SUSPEND GAME - Pauses the game timer and brings you back to the home page, storing the current game state in local storage so it may be resumed at the player's convenience. Not allowed in Multiplayer?
+FORFEIT - Ends the game as a loss for the player and a win for the opposing side.
+
+
+Turns (number and whose turn it is currently) displayed between player and 2-player or computer turn.
+
+
+Computer uses the default deck only. 
+
+The Game is over when:
+The timer reaches 0
+One player has no cards in Deck Cards and no cards in the Discard pile.
+One player forfeits.
+
+STATE STUFF 
+
+For the Game:
+Current Timer needs tracking.
+Is Active needs tracking (for Pause).
+Current Turn Number needs tracking.
+P1 Turn or P2 Turn needs tracking.
+
+
+For the User:
+Current Deck needs tracking.
+Active Game needs tracking (for Suspend and Resume)
+Deck Cards needs tracking. 
+Hand needs tracking.
+Discard needs tracking
+
+Hand is minorly applicable for War but needs to be treated differently for future game types. I guess for the War game type it just can be loaded with the top card of the deck/top 3 during ties.
+Whenever TAKE YOUR TURN is pressed, the contents of Hand are revealed and removed from the hand and placed in whichever discard pile is applicable, OR in the case of ties, three cards are taken from the top of Deck Cards for both players, placed into Hand, and revealed.
+
+
+Deck Cards takes the array of cards from the Cards in the Current Deck's store and randomizes them. At the start of each turn, the card in index 0 gets loaded into the Hand and is removed from Deck Cards. 
+
+When Deck Cards is empty, it is loaded with the contents of Discard (which is then emptied) and re-shuffled and the game continues. 

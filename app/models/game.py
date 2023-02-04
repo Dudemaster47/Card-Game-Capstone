@@ -8,7 +8,7 @@ class Game(db.Model):
         
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
-    timer = db.Column(db.Integer, default=500, nullable=False)
+    timer = db.Column(db.Integer, default=300, nullable=False)
     game_type = db.Column(db.String, default="War", nullable=False)
     
     #relationship

@@ -23,6 +23,7 @@ def get_default_deck():
     res = {"deck": deck.to_dict()}
     return res
 
+
 #Get a Custom Deck by id
 @deck_routes.route('/<int:id>')
 def get_deck_by_id(id):

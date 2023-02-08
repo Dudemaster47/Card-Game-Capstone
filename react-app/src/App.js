@@ -7,7 +7,12 @@ import NavBar from './components/NavBar';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import UsersList from './components/UsersList';
 import User from './components/User';
+import Home from './components/Home/Home';
 import { authenticate } from './store/session';
+import { getAllUsersThunk } from './store/users'
+import { getDefaultDeckThunk } from './store/defaultDeck'
+import { getAllGamesThunk } from './store/games'
+import { getAllCardsThunk } from './store/cards'
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -19,6 +24,13 @@ function App() {
       setLoaded(true);
     })();
   }, [dispatch]);
+
+  useEffect(() => {
+		dispatch(getAllUsersThunk());
+    dispatch(getAllCardsThunk());
+		dispatch(getDefaultDeckThunk());
+    dispatch(getAllGamesThunk());
+	});
 
   if (!loaded) {
     return null;
@@ -41,7 +53,7 @@ function App() {
           <User />
         </ProtectedRoute>
         <Route path='/' exact={true} >
-          <h1>My Home Page</h1>
+          <Home />
         </Route>
       </Switch>
     </BrowserRouter>

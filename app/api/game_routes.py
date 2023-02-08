@@ -39,10 +39,13 @@ def  add_game():
     form = GameForm()
 
     form['csrf_token'].data = request.cookies['csrf_token']
+    print("CATCHING YOUR ATTENTION BBB")
+
     if form.validate_on_submit():
         game = Game()
         form.populate_obj(game)
-
+        print("CATCHING YOUR ATTENTION AAA")
+   
         db.session.add(game)
         db.session.commit()
         return {game.id: game.to_dict()}

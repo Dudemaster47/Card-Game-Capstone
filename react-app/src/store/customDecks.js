@@ -110,9 +110,9 @@ export const deleteDeckThunk = (data) => async (dispatch) => {
 const customDeckReducer = (state = {}, action) => {
     let newState = { ...state };
 	switch (action.type) {
-		case LOAD_DECKS:
+		case LOAD_CUSTOM_DECKS:
 			return { ...newState, ...action.payload };
-		case DELETE_DECK:
+		case DELETE_CUSTOM_DECK:
 			delete newState[action.payload];
 			return newState;
 		default:

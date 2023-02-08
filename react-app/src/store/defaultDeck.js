@@ -6,7 +6,7 @@ const loadDeck = (payload) => ({
 });
 
 export const getDefaultDeckThunk = (id) => async (dispatch) => {
-	const res = await fetch(`/api/users/decks`);
+	const res = await fetch(`/api/decks`);
 
 	if (res.ok) {
 		const payload = await res.json();
@@ -18,7 +18,7 @@ export const getDefaultDeckThunk = (id) => async (dispatch) => {
 const defaultDeckReducer = (state = {}, action) => {
     let newState = { ...state };
 	switch (action.type) {
-		case LOAD_DECK:
+		case LOAD_DEFAULT_DECK:
 			return { ...newState, ...action.payload };
 		default:
 			return state;

@@ -18,7 +18,7 @@ export const getAllGamesThunk = () => async (dispatch) => {
 	const response = await fetch(`/api/games`);
 	if (response.ok) {
 		const data = await response.json();
-		dispatch(loadReviews(data));
+		dispatch(loadGames(data));
 		return data;
 	}
 };
@@ -83,7 +83,7 @@ export const editGameThunk = (game) => async (dispatch) => {
 	}
 };
 
-// DELETE a REVIEW
+// DELETE a GAME
 export const deleteGameThunk = (data) => async (dispatch) => {
 	const response = await fetch(`/api/games/${data.id}`, {
 		method: "DELETE",
@@ -98,7 +98,7 @@ const gameReducer = (state = {}, action) => {
 	switch (action.type) {
 		case LOAD_GAMES:
 			return { ...newState, ...action.payload };
-		case DELETE_GAMES:
+		case DELETE_GAME:
 			delete newState[action.payload];
 			return newState;
 		default:

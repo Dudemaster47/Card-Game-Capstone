@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -41,8 +40,8 @@ const NavBar = () => {
         <li>Resume Game In Progress (if applicable)</li>
         { sessionUser ? (
           <li>
-              <NavLink to='/users' exact={true} activeClassName='active'>
-                Users
+              <NavLink to={`/users/${sessionUser.id}`} exact={true} activeClassName='active'>
+                Profile
               </NavLink>
             </li>
         ) : null}

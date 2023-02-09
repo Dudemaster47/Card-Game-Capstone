@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import UserStats from './UserComponents/UserStats';
+import DeckSelector from './UserComponents/DeckSelector';
 
 function User() {
   const [user, setUser] = useState({});
@@ -21,17 +23,16 @@ function User() {
   }
 
   return (
-    <ul>
-      <li>
-        <strong>User Id</strong> {userId}
-      </li>
-      <li>
-        <strong>Username</strong> {user.username}
-      </li>
-      <li>
-        <strong>Email</strong> {user.email}
-      </li>
-    </ul>
+    <>
+      <div>
+        <img src={user.profileImg} alt="profile image" />
+      </div>
+      <div>
+        <h1>{user.username}'s Profile!</h1>
+      </div>
+      <div><UserStats /></div>
+      <div><DeckSelector /></div>
+    </>
   );
 }
 export default User;

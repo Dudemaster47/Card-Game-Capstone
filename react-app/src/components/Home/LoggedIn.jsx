@@ -7,7 +7,7 @@ function LoggedIn() {
     const sessionUser = useSelector((state) => state.session.user);
     const dispatch = useDispatch();
     const [gameExists, setGameExists] = useState(sessionUser.createdGames.length > 0)
-    const gameCreator = {
+    const gameCreator = sessionUser && {
         user_id: `${sessionUser.id}`,
         time_limit: "300",
         game_type: "War"

@@ -7,7 +7,7 @@ import { refreshSessionuser } from "../../store/session";
 function GameReady() {
     const sessionUser = useSelector((state) => state.session.user);
     const dispatch = useDispatch();
-    const game = sessionUser.createdGames[0];
+    const game = sessionUser.createdGames && sessionUser.createdGames[0];
     const [isOpen, setIsOpen] = useState(false);
     const [exists, setExists] = useState(true);
     const [edited, setEdited] = useState(false);
@@ -33,26 +33,27 @@ function GameReady() {
     }
 
     return (
-        <>
+        <>  { sessionUser && (
             <div>
-                <div>Game ID# {sessionUser.createdGames[0].id}</div>
-                <div>Time Limit: {sessionUser.createdGames[0].timeLimit}</div>
-                <div>Game Type: {sessionUser.createdGames[0].gameType}</div>
+                <div>
+                    <div>Game ID# {sessionUser.createdGames[0].id}</div>
+                    <div>Time Limit: {sessionUser.createdGames[0].timeLimit}</div>
+                    <div>Game Type: {sessionUser.createdGames[0].gameType}</div>
+                </div>
+                <button>1P GAME START</button>
+                <button onClick={notYetImplemented}>2P GAME HOST</button>
+                <button onClick={() => setIsOpen(true)}>GAME SETTINGS</button>
+                <button onClick={deleteGame}>DELETE GAME</button>
+    
+                { isOpen && (
+                    <GameSettingsModal 
+                        setIsOpen={setIsOpen}
+                        game={game}
+                        sendDataToHome={sendDataToHome}
+                    />
+                )}
             </div>
-            <button>1P GAME START</button>
-            <button onClick={notYetImplemented}>2P GAME HOST</button>
-            <button onClick={() => setIsOpen(true)}>GAME SETTINGS</button>
-            <button onClick={deleteGame}>DELETE GAME</button>
-
-            { isOpen && (
-                <GameSettingsModal 
-                    setIsOpen={setIsOpen}
-                    game={game}
-                    sendDataToHome={sendDataToHome}
-                />
-            )
-
-            }
+        )}
         </>
     )
 

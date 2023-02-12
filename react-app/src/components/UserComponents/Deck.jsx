@@ -28,36 +28,39 @@ function Deck({deckID, deckArray}){
     }
 
     return (
-        <>  
+        <>  { deck && (
             <div>
                 <div>
-                    <img src={deck[0].cardArt} alt={deck[0].cardArt} />
+                    <div>
+                        <img src={deck[0].cardArt} alt={deck[0].cardArt} />
+                    </div>
+                    {deck[0].deckName ? (
+                        <p>{deck[0].deckName}</p>
+                    ) : (
+                        <p>Default Deck</p>
+                    )}
                 </div>
+                
                 {deck[0].deckName ? (
-                    <p>{deck[0].deckName}</p>
-                ) : (
-                    <p>Default Deck</p>
+                    <div>
+                        <button onClick={() => setIsOpen(true)}>Change Deck</button>
+                        <button onClick={(e) => {
+                            deleteDeck(e)
+                            }}>
+                            Delete Deck
+                        </button>
+                    </div>
+                ) : null}
+
+                { isOpen && (
+                    <EditDeckModal
+                        setIsOpen={setIsOpen}
+                        sendDataToDecks={sendDataToDecks}
+                        deck={deck[0]}
+                    />
                 )}
             </div>
-            
-            {deck[0].deckName ? (
-                <div>
-                    <button onClick={() => setIsOpen(true)}>Change Deck</button>
-                    <button onClick={(e) => {
-                        deleteDeck(e)
-                        }}>
-                        Delete Deck
-                    </button>
-                </div>
-            ) : null}
-
-            { isOpen && (
-                <EditDeckModal
-                    setIsOpen={setIsOpen}
-                    sendDataToDecks={sendDataToDecks}
-                    deck={deck[0]}
-                />
-            )}
+        )}
         </>
     )
 }

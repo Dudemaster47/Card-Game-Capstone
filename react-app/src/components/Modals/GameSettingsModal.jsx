@@ -2,10 +2,10 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { editGameThunk } from "../../store/games";
 
-function GameSettingsModal({setIsOpen, game}) {
+function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
     const dispatch = useDispatch();
-	const [timeLimit, setTimeLimit] = useState("");
-	const [gameType, setGameType] = useState("");
+	const [timeLimit, setTimeLimit] = useState("300");
+	const [gameType, setGameType] = useState("War");
 	const [errors, setErrors] = useState([]);
 
 	const handleSubmit = async (e) => {
@@ -22,6 +22,7 @@ function GameSettingsModal({setIsOpen, game}) {
 			setErrors(data);
 		} else {
 			setIsOpen(false);
+			sendDataToHome(true)
 		}
 	};
     return (

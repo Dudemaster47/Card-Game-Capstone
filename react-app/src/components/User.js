@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import UserStats from './UserComponents/UserStats';
 import DeckSelector from './UserComponents/DeckSelector';
 
 function User() {
   const [user, setUser] = useState({});
   const { userId }  = useParams();
+  const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
     if (!userId) {
@@ -25,13 +27,17 @@ function User() {
   return (
     <>
       <div>
-        <img src={user.profileImg} alt="profile image" />
+        <img src={user.profileImg} alt="profile" />
       </div>
       <div>
         <h1>{user.username}'s Profile!</h1>
       </div>
       <div><UserStats /></div>
-      <div><DeckSelector /></div>
+      { sessionUser.id == userId ? (
+        <div><DeckSelector user={sessionUser} /></div>
+      ): null
+
+      }
     </>
   );
 }

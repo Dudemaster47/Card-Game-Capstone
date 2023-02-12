@@ -12,4 +12,4 @@ def validate_image(form,field):
 class UserForm(FlaskForm):
     username=StringField('username', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired()])
-    profile_img=StringField('profile_img')
+    profile_img=StringField('profile_img', validators=[URL(require_tld=True,message="Please provide a valid url")])

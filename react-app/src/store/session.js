@@ -97,6 +97,16 @@ export const signUp = (username, email, password) => async (dispatch) => {
   }
 }
 
+export const refreshSessionuser = (userId) => async (dispatch) => {
+	const res = await fetch(`/api/users/${userId}`);
+
+	if (res.ok) {
+		const payload = await res.json();
+		dispatch(setUser(payload));
+		return payload;
+	}
+};
+
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_USER:

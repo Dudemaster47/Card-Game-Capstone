@@ -62,7 +62,6 @@ export const createGameThunk = (data) => async (dispatch) => {
 // EDIT A GAME
 export const editGameThunk = (game) => async (dispatch) => {
 	const editedGame = JSON.stringify(game);
-	console.log(editedGame, "test2")
 	const response = await fetch(`/api/games/${game.id}`, {
 		method: "PUT",
 		headers: {

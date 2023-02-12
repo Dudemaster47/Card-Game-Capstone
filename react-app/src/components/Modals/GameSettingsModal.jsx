@@ -21,8 +21,7 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 		if (data) {
 			setErrors(data);
 		} else {
-			setIsOpen(false);
-			console.log(editedGame, "test1")
+			setIsOpen(false)
 			sendDataToHome(true)
 		}
 	};

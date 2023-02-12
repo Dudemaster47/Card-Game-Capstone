@@ -3,7 +3,6 @@ import Deck from "./Deck";
 import CreateDeckModal from "../Modals/CreateDeckModal";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllDecksThunk } from "../../store/customDecks";
-import { refreshSessionuser } from "../../store/session";
 
 function DeckSelector({user}) {
     const dispatch = useDispatch();

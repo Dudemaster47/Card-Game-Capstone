@@ -22,12 +22,12 @@ def seed():
         # Make sure to add all your other model's undo functions below
         undo_games()
         undo_custom_decks()
+        undo_users()
         undo_cards()
         undo_default_deck()
-        undo_users()
-    seed_users()
     seed_default_deck()
     seed_cards()
+    seed_users()
     seed_custom_decks()
     seed_games()
     # Add other seed functions here
@@ -38,7 +38,7 @@ def seed():
 def undo():
     undo_games()
     undo_custom_decks()
+    undo_users()
     undo_cards()
     undo_default_deck()
-    undo_users()
     # Add other undo functions here

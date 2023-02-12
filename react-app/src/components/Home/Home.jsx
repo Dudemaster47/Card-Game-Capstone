@@ -2,12 +2,9 @@ import { useSelector } from 'react-redux';
 import LoggedOut from './LoggedOut';
 import LoggedIn from './LoggedIn';
 import GameReady from './GameReady';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 
 function Home() {
-    const dispatch = useDispatch();
     const sessionUser = useSelector((state) => state.session.user);
  
     return (

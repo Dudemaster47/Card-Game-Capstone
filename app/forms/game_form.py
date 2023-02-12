@@ -5,5 +5,5 @@ from app.models import Game
 
 class GameForm(FlaskForm):
     user_id = StringField('userId', validators=[DataRequired()])
-    time_limit = StringField('timeLimit', validators=[DataRequired()])
+    timer = IntegerField('timer', validators=[DataRequired()])
     game_type = StringField('gameType', validators=[DataRequired()])

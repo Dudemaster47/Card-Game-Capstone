@@ -14,7 +14,7 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 		const editedGame = {
 			id: game.id,
 			user_id: game.userId,
-			time_limit: timeLimit,
+			timer: timeLimit,
 			game_type: gameType,
 		};
 		let data = await dispatch(editGameThunk(editedGame));
@@ -22,6 +22,7 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 			setErrors(data);
 		} else {
 			setIsOpen(false);
+			console.log(editedGame, "test1")
 			sendDataToHome(true)
 		}
 	};
@@ -51,7 +52,7 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 									name="time limit"
 									value={timeLimit}
 									placeholder={game?.timeLimit}
-									onChange={(e) => setTimeLimit(e.target.value)}
+									onChange={(e) => setTimeLimit(parseInt(e.target.value))}
 								/>
 							</div>
 							<label>Game Type: </label>

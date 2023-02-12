@@ -21,14 +21,14 @@ def seed():
         # the schema name (see comment in users.py undo_users function).
         # Make sure to add all your other model's undo functions below
         undo_games()
-        undo_custom_decks()
-        undo_users()
         undo_cards()
+        undo_custom_decks()
         undo_default_deck()
-    seed_default_deck()
-    seed_cards()
+        undo_users()
     seed_users()
+    seed_default_deck()
     seed_custom_decks()
+    seed_cards()
     seed_games()
     # Add other seed functions here
 
@@ -37,8 +37,8 @@ def seed():
 @seed_commands.command('undo')
 def undo():
     undo_games()
-    undo_custom_decks()
-    undo_users()
     undo_cards()
+    undo_custom_decks()
     undo_default_deck()
+    undo_users()
     # Add other undo functions here

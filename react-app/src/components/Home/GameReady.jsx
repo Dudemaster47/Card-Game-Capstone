@@ -37,7 +37,7 @@ function GameReady() {
             <div>
                 <div>
                     <div>Game ID# {sessionUser.createdGames[0].id}</div>
-                    <div>Time Limit: {sessionUser.createdGames[0].timeLimit}</div>
+                    <div>Time Limit: {sessionUser.createdGames[0].timer}</div>
                     <div>Game Type: {sessionUser.createdGames[0].gameType}</div>
                 </div>
                 <button>1P GAME START</button>

@@ -8,8 +8,8 @@ class Game(db.Model):
         
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
-    timer = db.Column(db.Integer, default=300, nullable=False)
-    game_type = db.Column(db.String, default="War", nullable=False)
+    timer = db.Column(db.Integer, nullable=False)
+    game_type = db.Column(db.String, nullable=False)
     
     #relationship
     player_1 = db.relationship('User', back_populates = 'created_games')
@@ -19,6 +19,6 @@ class Game(db.Model):
         return {
             'id': self.id,
             'userId': self.user_id,
-            'timeLimit': self.timer,
+            'timer': self.timer,
             'gameType': self.game_type,
         }

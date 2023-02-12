@@ -9,7 +9,7 @@ function LoggedIn() {
     const [gameExists, setGameExists] = useState(sessionUser.createdGames.length > 0)
     const gameCreator = sessionUser && {
         user_id: `${sessionUser.id}`,
-        time_limit: "300",
+        timer: "300",
         game_type: "War"
     }
 

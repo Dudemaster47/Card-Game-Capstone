@@ -33,7 +33,7 @@ function Deck({deckID, deckArray}){
 
     const notYetImplemented = (e) => {
         e.preventDefault();
-        window.alert("Not yet implemented!")
+        window.alert("Give me a day and it'll be ready")
     }
 
     return (

@@ -26,6 +26,7 @@ function Deck({deckID, deckArray}){
         e.preventDefault();
         window.alert("insert are you sure modal here")
         dispatch(deleteDeckThunk(deck[0]))
+        setDeleted(false)
         setDeleted(true)
     }
 
@@ -45,10 +46,10 @@ function Deck({deckID, deckArray}){
                 
                 {deck[0].deckName ? (
                     <div>
-                        <button onClick={() => setIsOpen(true)}>Change Deck</button>
+                        <button onClick={() => setIsOpen(true)} className="mainButton">Change Deck</button>
                         <button onClick={(e) => {
                             deleteDeck(e)
-                            }}>
+                            }} className="mainButton">
                             Delete Deck
                         </button>
                     </div>

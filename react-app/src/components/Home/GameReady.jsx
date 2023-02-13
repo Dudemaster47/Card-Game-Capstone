@@ -42,10 +42,10 @@ function GameReady() {
                     <div>Time Limit: {sessionUser.createdGames[0].timer}</div>
                     <div>Game Type: {sessionUser.createdGames[0].gameType}</div>
                 </div>
-                <button>1P GAME START</button>
-                <button onClick={notYetImplemented}>2P GAME HOST</button>
-                <button onClick={() => setIsOpen(true)}>GAME SETTINGS</button>
-                <button onClick={deleteGame}>DELETE GAME</button>
+                <button onClick={notYetImplemented} className="mainButton">1P GAME START</button>
+                <button onClick={notYetImplemented} className="mainButton">2P GAME HOST</button>
+                <button onClick={() => setIsOpen(true)} className="mainButton">GAME SETTINGS</button>
+                <button onClick={deleteGame} className="mainButton">DELETE GAME</button>
     
                 { isOpen && (
                     <GameSettingsModal 

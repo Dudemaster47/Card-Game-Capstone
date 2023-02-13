@@ -35,9 +35,9 @@ function LoggedIn() {
         <>
             <button onClick={(e) => {
                 handleClick(e)
-                setGameExists(true)}}>CREATE A GAME</button>
-            <button onClick={notYetImplemented}>JOIN A GAME</button>
-            <button onClick={notYetImplemented}>RESUME GAME</button>
+                setGameExists(true)}} className="mainButton">CREATE A GAME</button>
+            <button onClick={notYetImplemented} className="mainButton">JOIN A GAME</button>
+            <button onClick={notYetImplemented} className="mainButton">RESUME GAME</button>
         </>
     )
 }

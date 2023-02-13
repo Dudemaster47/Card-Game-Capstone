@@ -32,8 +32,14 @@ function User() {
       <div>
         <h1>{user.username}'s Profile!</h1>
       </div>
-      <div><UserStats /></div>
-      { sessionUser.id == userId ? (
+      { sessionUser.id !== 1 ? (
+        <div>
+          <div><UserStats /></div>
+          <button className="mainButton">Edit User Profile</button>
+        </div>
+      ) : null
+      }
+      { (sessionUser.id == userId) && (sessionUser.id !== 1) ? (
         <div><DeckSelector user={sessionUser} /></div>
       ): null
 

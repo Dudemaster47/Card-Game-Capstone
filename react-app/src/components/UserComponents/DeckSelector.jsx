@@ -7,11 +7,13 @@ import { getAllDecksThunk } from "../../store/customDecks";
 function DeckSelector({user}) {
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
-    const defaultDeck = user.defaultDeck;
+    let defaultDeck = user.defaultDeck;
+    defaultDeck.id = 0;
     const realDeckArray = useSelector((state) => state.session.user.decks)
     let deckArray = [defaultDeck].concat(realDeckArray)
     const sessionUser = useSelector((state) => state.session.user);
     const userId = sessionUser.id;
+    console.log(deckArray);
 
     useEffect(() => {
         dispatch(getAllDecksThunk(userId));
@@ -20,7 +22,7 @@ function DeckSelector({user}) {
 
     return (
         <>
-            <button onClick={() => setIsOpen(true)}>Create New Deck</button>
+            <button onClick={() => setIsOpen(true)} className="mainButton">Create New Deck</button>
             {(deckArray && deckArray.includes(defaultDeck)) && deckArray.map((el) => (
                 <li key={el.id}>
                     <Deck deckID={el.id} deckArray={deckArray} />

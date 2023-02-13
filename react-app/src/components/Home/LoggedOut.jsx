@@ -16,7 +16,20 @@ function LoggedOut() {
 		return dispatch(login(guestUser.email, guestUser.password));
 	};
     return (
-        <h2>This is Card Games!! To continue, please <Link to='/sign-up'>SIGN UP</Link>, <Link to='/login'>LOG IN</Link>, or <button onClick={handleClick}>CONTINUE AS GUEST</button></h2>
+    <div className="loggedOutContainer">   
+        <h2 className="loginBlurb">This is Card Games (better name pending)!! To continue, please:</h2>
+        <ul className="loginList">
+            <li className="loginListButton">
+                <Link to='/sign-up' className="mainButton">SIGN UP</Link>
+            </li>
+            <li className="loginListButton">
+                <Link to='/login' className="mainButton">LOG IN</Link>
+            </li>
+            <li className="loginListButton">
+                <button onClick={handleClick} className="mainButton">CONTINUE AS GUEST</button>
+            </li>
+        </ul>
+    </div>
     );
 
 }

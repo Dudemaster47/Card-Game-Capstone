@@ -2,17 +2,18 @@ import { useSelector } from 'react-redux';
 import LoggedOut from './LoggedOut';
 import LoggedIn from './LoggedIn';
 import GameReady from './GameReady';
+import "./home.css"
 
 
 function Home() {
     const sessionUser = useSelector((state) => state.session.user);
  
     return (
-        <>
-        <h1>CARD GAME APP VER 0.0.1</h1>
-        <img src="" alt="logo of hand holding cardes" />
+        <div className="homeContainer">
+        <h1 className="appTitle">CARD GAME APP VER 0.0.1</h1>
+        <img src="" alt="logo pending" />
         {sessionUser ? (
-            <div>
+            <div className="loggedInBox">
                 {sessionUser && sessionUser.createdGames.length > 0 ? (
                     <div><GameReady /></div>
                 ) : (
@@ -20,9 +21,9 @@ function Home() {
                 )}
             </div>
         ) : (
-        <div><LoggedOut /></div>
+        <div className="loggedOutBox"><LoggedOut /></div>
         )}
-        </>
+        </div>
     )
 }
 

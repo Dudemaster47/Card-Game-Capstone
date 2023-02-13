@@ -13,7 +13,7 @@ const NavBar = () => {
   }
 
   return (
-    <nav>
+    <nav className="overBar">
       <ul className="navBar">
         <li className="navTab">
           <NavLink to='/' exact={true} activeClassName='active'>
@@ -21,20 +21,15 @@ const NavBar = () => {
           </NavLink>
         </li>
         { sessionUser ? (
-          <div>
-            <li className="navTab">
+          <div className="navTab">
+            <li>
               <LogoutButton className="navButton" />
             </li>
             
           </div>
         ): (
-          <div>
-            <li className="navTab">
-              <NavLink to='/login' exact={true} activeClassName='active'>
-                Log In
-              </NavLink>
-            </li>
-            <li className="navTab">
+          <div className="navTab">
+            <li>
               <NavLink to='/sign-up' exact={true} activeClassName='active'>
                 Sign Up
               </NavLink>
@@ -49,7 +44,15 @@ const NavBar = () => {
                 Profile
               </NavLink>
             </li>
-        ) : null}
+        ) : (
+          <div className="navTab">
+            <li>
+              <NavLink to='/login' exact={true} activeClassName='active'>
+                Log In
+              </NavLink>
+            </li>
+          </div>
+        )}
       </ul>
     </nav>
   );

@@ -29,24 +29,32 @@ function CreateDeckModal({setIsOpen}){
 
     return (
         <>
-        <div onClick={() => setIsOpen(false)} />
-			<div>
-				<div>
-					<div>
-						<h5>Deck Creation</h5>
+        <div className="darkBG" onClick={() => setIsOpen(false)} />
+			<div className="centered">
+				<div className="modal">
+					<div className="modalHeader">
+						<h5 className="modalHeading">Deck Creation</h5>
 					</div>
 					<button
 						onClick={() => setIsOpen(false)}
+						className="closeBtn"
 					>
+						X
 					</button>
-					<div>
+					<div className="modalContent">
 						<form onSubmit={handleSubmit}>
-							<div>
+							<div className="errors-section">
 								{errors.map((error, ind) => (
-									<div key={ind}>{error}</div>
+									<div className="error-body" key={ind}>
+										<ul>
+											<li className="error-item">
+												{error}
+											</li>
+										</ul>
+									</div>
 								))}
 							</div>
-							<div>
+							<div className="input">
 								<label htmlFor="deck name">Deck Name:</label>
 								<input
 									type="text"
@@ -56,7 +64,7 @@ function CreateDeckModal({setIsOpen}){
 									onChange={(e) => setDeckName(e.target.value)}
 								/>
 							</div>
-                            <div>
+                            <div className="input">
 								<label htmlFor="card art">Deck Art:</label>
 								<input
 									type="text"
@@ -69,15 +77,17 @@ function CreateDeckModal({setIsOpen}){
 						</form>
 					</div>
 
-					<div>
-						<div>
+					<div className="modalActions">
+						<div className="actionsContainer">
 							<button
 								onClick={handleSubmit}
+								className="submitBtn"
 							>
 								Submit
 							</button>
 							<button
 								onClick={() => setIsOpen(false)}
+								className="cancelBtn"
 							>
 								Cancel
 							</button>

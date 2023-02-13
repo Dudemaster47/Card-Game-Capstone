@@ -8,9 +8,6 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 	const [gameType, setGameType] = useState(game.gameType);
 	const [errors, setErrors] = useState([]);
 
-	console.log(game.timer);
-	console.log(game.gameType)
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -30,24 +27,32 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 	};
     return (
         <>
-        <div onClick={() => setIsOpen(false)} />
-			<div>
-				<div>
-					<div>
-						<h5>Game Settings</h5>
+        <div className="darkBG" onClick={() => setIsOpen(false)} />
+			<div className="centered">
+				<div className="modal">
+					<div className="modalHeader">
+						<h5 className="modalHeading">Game Settings</h5>
 					</div>
 					<button
 						onClick={() => setIsOpen(false)}
+						className="closeBtn"
 					>
+						X
 					</button>
-					<div>
+					<div className="modalContent">
 						<form onSubmit={handleSubmit}>
-							<div>
+						<div className="errors-section">
 								{errors.map((error, ind) => (
-									<div key={ind}>{error}</div>
+									<div className="error-body" key={ind}>
+										<ul>
+											<li className="error-item">
+												{error}
+											</li>
+										</ul>
+									</div>
 								))}
 							</div>
-							<div>
+							<div className="input">
 								<label htmlFor="time limit">Time Limit:</label>
 								<input
 									type="text"
@@ -57,26 +62,30 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 									onChange={(e) => setTimeLimit(parseInt(e.target.value))}
 								/>
 							</div>
-							<label>Game Type: </label>
-							<select
-								value={gameType}
-								onChange={(e) => setGameType(e.target.value)}
-							>
-								<option value="--">--</option>
-								<option value="War">War</option>
-							</select>
+							<div className="input">
+								<label>Game Type: </label>
+								<select
+									value={gameType}
+									onChange={(e) => setGameType(e.target.value)}
+								>
+									<option value="--">--</option>
+									<option value="War">War</option>
+								</select>
+							</div>
 						</form>
 					</div>
 
-					<div>
-						<div>
+					<div className="modalActions">
+						<div className="actionsContainer">
 							<button
+								className="submitBtn"
 								onClick={handleSubmit}
 							>
 								Submit
 							</button>
 							<button
 								onClick={() => setIsOpen(false)}
+								className="cancelBtn"
 							>
 								Cancel
 							</button>

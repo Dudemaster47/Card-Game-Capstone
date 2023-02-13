@@ -57,3 +57,12 @@
     font-family: sans-serif;
     font-size: 48px;
 }
+
+.about {
+    color: white;
+    margin: 1% 0;
+}
+
+.about:hover {
+    color: red;
+}

@@ -8,6 +8,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import UsersList from './components/UsersList';
 import User from './components/User';
 import Home from './components/Home/Home';
+import PageNotFound from './components/PageNotFound';
 import { authenticate } from './store/session';
 import { getAllUsersThunk } from './store/users'
 import { getDefaultDeckThunk } from './store/defaultDeck'
@@ -55,6 +56,9 @@ function App() {
         <Route path='/' exact={true} >
           <Home />
         </Route>
+        <Route path="/">
+					<PageNotFound />
+				</Route>
       </Switch>
     </BrowserRouter>
   );

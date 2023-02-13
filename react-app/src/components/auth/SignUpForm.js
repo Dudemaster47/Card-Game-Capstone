@@ -14,11 +14,17 @@ const SignUpForm = () => {
 
   const onSignUp = async (e) => {
     e.preventDefault();
-    if (password === repeatPassword) {
-      const data = await dispatch(signUp(username, email, password));
-      if (data) {
-        setErrors(data)
+    if(email.includes("@")){
+      if (password === repeatPassword) {
+        const data = await dispatch(signUp(username, email, password));
+        if (data) {
+          setErrors(data)
+        }
+      } else {
+        window.alert("password and repeat password do not match!")
       }
+    } else {
+      window.alert("use an actual email address")
     }
   };
 
@@ -43,51 +49,59 @@ const SignUpForm = () => {
   }
 
   return (
-    <form onSubmit={onSignUp}>
-      <div>
-        {errors.map((error, ind) => (
-          <div key={ind}>{error}</div>
-        ))}
-      </div>
-      <div>
-        <label>User Name</label>
-        <input
-          type='text'
-          name='username'
-          onChange={updateUsername}
-          value={username}
-        ></input>
-      </div>
-      <div>
-        <label>Email</label>
-        <input
-          type='text'
-          name='email'
-          onChange={updateEmail}
-          value={email}
-        ></input>
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type='password'
-          name='password'
-          onChange={updatePassword}
-          value={password}
-        ></input>
-      </div>
-      <div>
-        <label>Repeat Password</label>
-        <input
-          type='password'
-          name='repeat_password'
-          onChange={updateRepeatPassword}
-          value={repeatPassword}
-          required={true}
-        ></input>
-      </div>
-      <button type='submit'>Sign Up</button>
-    </form>
+    <div className="centered">
+      <form onSubmit={onSignUp}>
+        <div className="errors-section">
+          {errors.map((error, ind) => (
+            <div className="error-body" key={ind}>
+              <ul>
+                <li className="error-item">
+                  {error}
+                </li>
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="input">
+          <label>User Name</label>
+          <input
+            type='text'
+            name='username'
+            onChange={updateUsername}
+            value={username}
+          ></input>
+        </div>
+        <div className="input">
+          <label>Email</label>
+          <input
+            type='text'
+            name='email'
+            onChange={updateEmail}
+            value={email}
+          ></input>
+        </div>
+        <div className="input">
+          <label>Password</label>
+          <input
+            type='password'
+            name='password'
+            onChange={updatePassword}
+            value={password}
+          ></input>
+        </div>
+        <div className="input">
+          <label>Repeat Password</label>
+          <input
+            type='password'
+            name='repeat_password'
+            onChange={updateRepeatPassword}
+            value={repeatPassword}
+            required={true}
+          ></input>
+        </div>
+        <button type='submit' className="mainButton">Sign Up</button>
+      </form>
+    </div>
   );
 };
 

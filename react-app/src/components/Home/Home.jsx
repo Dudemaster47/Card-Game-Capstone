@@ -3,6 +3,7 @@ import LoggedOut from './LoggedOut';
 import LoggedIn from './LoggedIn';
 import GameReady from './GameReady';
 import "./home.css"
+import { Link } from 'react-router-dom';
 
 
 function Home() {
@@ -12,6 +13,7 @@ function Home() {
         <div className="homeContainer">
         <h1 className="appTitle">CARD GAME APP VER 0.0.1</h1>
         <img src="" alt="logo pending" />
+        <a href="https://github.com/Dudemaster47/Card-Game-Capstone" className="about">About</a>
         {sessionUser ? (
             <div className="loggedInBox">
                 {sessionUser && sessionUser.createdGames.length > 0 ? (

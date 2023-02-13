@@ -30,24 +30,32 @@ function EditUserProfileModal({setIsOpen, user, sendDataToUser}) {
 
     return (
         <>
-        <div onClick={() => setIsOpen(false)} />
-			<div>
-				<div>
-					<div>
-						<h5>Edit User Profile</h5>
+        <div className="darkBG" onClick={() => setIsOpen(false)} />
+			<div className="centered">
+				<div className="modal">
+					<div className="modalHeader">
+						<h5 className="modalHeading">Edit User Profile</h5>
 					</div>
 					<button
 						onClick={() => setIsOpen(false)}
+						className="closeBtn"
 					>
+						X
 					</button>
-					<div>
+					<div className="modalContent">
 						<form onSubmit={handleSubmit}>
-							<div>
+							<div className="errors-section">
 								{errors.map((error, ind) => (
-									<div key={ind}>{error}</div>
+									<div className="error-body" key={ind}>
+										<ul>
+											<li className="error-item">
+												{error}
+											</li>
+										</ul>
+									</div>
 								))}
 							</div>
-							<div>
+							<div className="input">
 								<label htmlFor="username">Username:</label>
 								<input
 									type="text"
@@ -57,7 +65,7 @@ function EditUserProfileModal({setIsOpen, user, sendDataToUser}) {
 									onChange={(e) => setUsername(e.target.value)}
 								/>
 							</div>
-                            <div>
+                            <div className="input">
 								<label htmlFor="email">Email:</label>
 								<input
 									type="text"
@@ -67,7 +75,7 @@ function EditUserProfileModal({setIsOpen, user, sendDataToUser}) {
 									onChange={(e) => setEmail(e.target.value)}
 								/>
 							</div>
-                            <div>
+                            <div className="input">
 								<label htmlFor="profile image">Profile Image:</label>
 								<input
 									type="text"
@@ -80,15 +88,17 @@ function EditUserProfileModal({setIsOpen, user, sendDataToUser}) {
 						</form>
 					</div>
 
-					<div>
-						<div>
+					<div className="modalActions">
+						<div className="actionsContainer">
 							<button
 								onClick={handleSubmit}
+								className="submitBtn"
 							>
 								Submit
 							</button>
 							<button
 								onClick={() => setIsOpen(false)}
+								className="cancelBtn"
 							>
 								Cancel
 							</button>

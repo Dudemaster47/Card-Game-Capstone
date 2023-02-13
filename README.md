@@ -1,148 +1,67 @@
-# Flask React Project
+# CARD GAME APP
 
-This is the starter for the Flask React project.
+By Alex Hiller
 
-## Getting started
-1. Clone this repository (only this branch)
+## Intro
 
-2. Install dependencies
-
-      ```bash
-      pipenv install -r requirements.txt
-      ```
-
-3. Create a **.env** file based on the example with proper settings for your
-   development environment
-
-4. Make sure the SQLite3 database connection URL is in the **.env** file
-
-5. This starter organizes all tables inside the `flask_schema` schema, defined
-   by the `SCHEMA` environment variable.  Replace the value for
-   `SCHEMA` with a unique name, **making sure you use the snake_case
-   convention**.
-
-6. Get into your pipenv, migrate your database, seed your database, and run your Flask app
-
-   ```bash
-   pipenv shell
-   ```
-
-   ```bash
-   flask db upgrade
-   ```
-
-   ```bash
-   flask seed all
-   ```
-
-   ```bash
-   flask run
-   ```
-
-7. To run the React App in development, checkout the [README](./react-app/README.md) inside the `react-app` directory.
+This is an app with which one can play card games against other people and compete to be the ultimate card champion! Ideally. Right now I'm still working on getting the simplest card game I can think of, War, to a state where it's playable. 
 
 
-## Deployment through Render.com
+## Index
 
-First, refer to your Render.com deployment articles for more detailed
-instructions about getting started with [Render.com], creating a production
-database, and deployment debugging tips.
+- [API DOCUMENTATION](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/API-ROUTES)
+- [DATABASE SCHEMA](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/Database-Schema)
+- [FRONTEND ROUTES](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/Front-End-Routes)
+- [USER STORIES](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/User-Stories)
+- [MVP LIST](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/MVP-LIST)
+- [OH GOD IT'S RECURSING](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/README)
 
-From the [Dashboard], click on the "New +" button in the navigation bar, and
-click on "Web Service" to create the application that will be deployed.
+## Technologies Used
 
-Look for the name of the application you want to deploy, and click the "Connect"
-button to the right of the name.
+- Javascript
+- React/Redux
+- Python
+- CSS
+- Flask/SQLAlchemy
 
-Now, fill out the form to configure the build and start commands, as well as add
-the environment variables to properly deploy the application.
+## Overview
 
-### Part A: Configure the Start and Build Commands
+A full stack application with heavy front end focus in developing card games for users to play against each other.
 
-Start by giving your application a name.
+The currently functional CRUDS are extremely simple: the ability to add a game to the database (it'll be playable soon i promise) and the ability to create custom decks for use in the game. Custom decks being decks with art on the backs of cards that you upload yourself. The cards aren't customizable. For good reason.
 
-Leave the root directory field blank. By default, Render will run commands from
-the root directory.
+The next set of CRUDs require a fully functional game as well as multiplayer to implement: leaderboards that compare users against each other and a messaging system so users can trash talk each other while playing. 
 
-Make sure the Environment field is set set to "Python 3", the Region is set to
-the location closest to you, and the Branch is set to "main".
+![image](https://user-images.githubusercontent.com/97640520/218576811-eb2c59ec-0e3e-4443-96d7-61fb7135b8de.png)
+(This is the home page)
 
-Next, add your Build command. This is a script that should include everything
-that needs to happen _before_ starting the server.
+The home page is variable, having different renders for when a user is logged out, logged in but has no game rooms created, and logged in with a game room. Thus far all you can do is create an inaccessible game room as well as modify the settings and delete a game room, but eventually it will be the primary hub through which games are searched for, created, joined, etc. 
 
-For your Flask project, enter the following command into the Build field, all in
-one line:
+![image](https://user-images.githubusercontent.com/97640520/218577241-8a3b558e-83ea-4038-8524-a2fd1add1912.png)
+(This is the profile page)
 
-```shell
-# build command - enter all in one line
-npm install --prefix react-app &&
-npm run build --prefix react-app &&
-pip install -r requirements.txt &&
-pip install psycopg2 &&
-flask db upgrade &&
-flask seed all
-```
+The profile page is where the stuff that you show off to other players is managed. You can see your winning and losing statistics as well as manage which deck is to be used in game (that's also pending). That's really it.
 
-This script will install dependencies for the frontend, and run the build
-command in the __package.json__ file for the frontend, which builds the React
-application. Then, it will install the dependencies needed for the Python
-backend, and run the migration and seed files.
+Also some of the image links I used ended up being bad links, but that can be fixed at a later date. Kind of low priority.
 
-Now, add your start command in the Start field:
 
-```shell
-# start script
-gunicorn app:app
-```
+...So far, there's not really anything else. 
 
-_If you are using websockets, use the following start command instead for increased performance:_
+## Sample Code
 
-`gunicorn --worker-class eventlet -w 1 app:app`
+Sorry, this is going to wait until there's actual interesting code to show off. Like a functional game.
 
-### Part B: Add the Environment Variables
+## My journey
 
-Click on the "Advanced" button at the bottom of the form to configure the
-environment variables your application needs to access to run properly. In the
-development environment, you have been securing these variables in the __.env__
-file, which has been removed from source control. In this step, you will need to
-input the keys and values for the environment variables you need for production
-into the Render GUI.
+Listen, I wanna impress by going above and beyond but god a tad bogged down during the first month of work. Now that I have a stable work flow, I foresee the second month going much smoother and rocketing ahead to something truly cool. Or at least, kind of impressive to have built from scratch.
 
-Click on "Add Environment Variable" to start adding all of the variables you
-need for the production environment.
+## Future updates (in order)
 
-Add the following keys and values in the Render GUI form:
-
-- SECRET_KEY (click "Generate" to generate a secure secret for production)
-- FLASK_ENV production
-- FLASK_APP app
-- SCHEMA (your unique schema name, in snake_case)
-- REACT_APP_BASE_URL (use render.com url, located at top of page, similar to
-  https://this-application-name.onrender.com)
-
-In a new tab, navigate to your dashboard and click on your Postgres database
-instance.
-
-Add the following keys and values:
-
-- DATABASE_URL (copy value from Internal Database URL field)
-
-_Note: Add any other keys and values that may be present in your local __.env__
-file. As you work to further develop your project, you may need to add more
-environment variables to your local __.env__ file. Make sure you add these
-environment variables to the Render GUI as well for the next deployment._
-
-Next, choose "Yes" for the Auto-Deploy field. This will re-deploy your
-application every time you push to main.
-
-Now, you are finally ready to deploy! Click "Create Web Service" to deploy your
-project. The deployment process will likely take about 10-15 minutes if
-everything works as expected. You can monitor the logs to see your build and
-start commands being executed, and see any errors in the build process.
-
-When deployment is complete, open your deployed site and check to see if you
-successfully deployed your Flask application to Render! You can find the URL for
-your site just below the name of the Web Service at the top of the page.
-
-[Render.com]: https://render.com/
-[Dashboard]: https://dashboard.render.com/
+- Implement Deck Selection
+- Implement a 1P game of War that can be played against a computer
+- Implement animations
+- Implement Multiplayer functionality
+- Implement Leaderboards
+- Implement P2P chat ingame
+- Implement Better Card Games- Gin Rummy and Blackjack are on the table. It's unlikely that Gin Rummy will have a 1P mode, but Blackjack can.
+- Yassify the website. It's pretty barebones, tbh. Needs more clip art and animated gifs.

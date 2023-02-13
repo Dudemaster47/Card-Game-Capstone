@@ -19,52 +19,54 @@ function Deck({deckID, deckArray}){
     }
     
     useEffect(() => {
-            dispatch(refreshSessionuser(sessionUser.id))
-    }, [edited, deleted])
+            dispatch(refreshSessionuser(sessionUser.id));
+            deckArray && setDeleted(false);
+            
+    }, [edited, deleted, dispatch])
 
     const deleteDeck = (e) => {
         e.preventDefault();
         window.alert("insert are you sure modal here")
-        dispatch(deleteDeckThunk(deck[0]))
-        setDeleted(false)
-        setDeleted(true)
+        dispatch(deleteDeckThunk(deck[0]));
+        setDeleted(true);
     }
 
     return (
-        <>  { deck && (
-            <div>
-                <div>
-                    <div>
-                        <img src={deck[0].cardArt} alt={deck[0].cardArt} />
+        <div className = "innerSelectorBox">  
+            { deck && (
+                <div className = "innerInnerSelectorBox">
+                    <div className = "deckInfoBox">
+                        <div className = "deckPictureBox">
+                            <img src={deck[0].cardArt} alt={deck[0].cardArt} className="deckPicture" />
+                        </div>
+                        {deck[0].deckName ? (
+                            <p className="deckName">{deck[0].deckName}</p>
+                        ) : (
+                            <p className="deckName">Default Deck</p>
+                        )}
                     </div>
+                    
                     {deck[0].deckName ? (
-                        <p>{deck[0].deckName}</p>
-                    ) : (
-                        <p>Default Deck</p>
+                        <div className="deckButtonBox">
+                            <button onClick={() => setIsOpen(true)} className="mainButton">Change Deck</button>
+                            <button onClick={(e) => {
+                                deleteDeck(e)
+                                }} className="mainButton">
+                                Delete Deck
+                            </button>
+                        </div>
+                    ) : null}
+
+                    { isOpen && (
+                        <EditDeckModal
+                            setIsOpen={setIsOpen}
+                            sendDataToDecks={sendDataToDecks}
+                            deck={deck[0]}
+                        />
                     )}
                 </div>
-                
-                {deck[0].deckName ? (
-                    <div>
-                        <button onClick={() => setIsOpen(true)} className="mainButton">Change Deck</button>
-                        <button onClick={(e) => {
-                            deleteDeck(e)
-                            }} className="mainButton">
-                            Delete Deck
-                        </button>
-                    </div>
-                ) : null}
-
-                { isOpen && (
-                    <EditDeckModal
-                        setIsOpen={setIsOpen}
-                        sendDataToDecks={sendDataToDecks}
-                        deck={deck[0]}
-                    />
-                )}
-            </div>
-        )}
-        </>
+            )}
+        </div>
     )
 }
 

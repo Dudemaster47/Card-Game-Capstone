@@ -20,20 +20,27 @@ function DeckSelector({user}) {
     }, [dispatch, userId, realDeckArray])
 
     return (
-        <>
-            <button onClick={() => setIsOpen(true)} className="mainButton">Create New Deck</button>
-            {(deckArray && deckArray.includes(defaultDeck)) && deckArray.map((el) => (
-                <li key={el.id}>
-                    <Deck deckID={el.id} deckArray={deckArray} />
-                </li>
-            ))}
+        <div className="innerDeckSelector">
+            <div className="deckSelectorTitleBar">
+                <div className="buttonShrinker2">
+                    <button onClick={() => setIsOpen(true)} className="mainButton">Create New Deck</button>
+                </div>
+                <h2 className="deckSelectorTitle">Deck Selector</h2>
+            </div>
+            <div className="deckContainer">
+                {(deckArray && deckArray.includes(defaultDeck)) && deckArray.map((el) => (
+                    <li key={el.id} className="selectorBox">
+                        <Deck deckID={el.id} deckArray={deckArray} />
+                    </li>
+                ))}
+            </div>
 
             { isOpen && (
                 <CreateDeckModal
                     setIsOpen={setIsOpen}
                 />
             )}
-        </>
+        </div>
     )
 }
 

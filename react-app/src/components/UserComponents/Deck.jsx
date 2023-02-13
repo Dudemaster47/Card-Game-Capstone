@@ -31,11 +31,16 @@ function Deck({deckID, deckArray}){
         setDeleted(true);
     }
 
+    const notYetImplemented = (e) => {
+        e.preventDefault();
+        window.alert("Not yet implemented!")
+    }
+
     return (
         <div className = "innerSelectorBox">  
             { deck && (
                 <div className = "innerInnerSelectorBox">
-                    <div className = "deckInfoBox">
+                    <div className = "deckInfoBox" onClick={notYetImplemented}>
                         <div className = "deckPictureBox">
                             <img src={deck[0].cardArt} alt={deck[0].cardArt} className="deckPicture" />
                         </div>

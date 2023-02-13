@@ -2,44 +2,49 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
+import "./navbar.css"
 
 const NavBar = () => {
   const sessionUser = useSelector((state) => state.session.user);
-  
+
+  const notYetImplemented = (e) => {
+    e.preventDefault();
+    window.alert("Not yet implemented!")
+  }
 
   return (
     <nav>
-      <ul>
-        <li>
+      <ul className="navBar">
+        <li className="navTab">
           <NavLink to='/' exact={true} activeClassName='active'>
             Home
           </NavLink>
         </li>
         { sessionUser ? (
           <div>
-            <li>
-              <LogoutButton />
+            <li className="navTab">
+              <LogoutButton className="navButton" />
             </li>
             
           </div>
         ): (
           <div>
-            <li>
+            <li className="navTab">
               <NavLink to='/login' exact={true} activeClassName='active'>
-                Login
+                Log In
               </NavLink>
             </li>
-            <li>
+            <li className="navTab">
               <NavLink to='/sign-up' exact={true} activeClassName='active'>
                 Sign Up
               </NavLink>
             </li>
           </div>
         )}
-        <li><span>CARD GAME APP</span></li>
-        <li>Resume Game In Progress (if applicable)</li>
+        <li className="navHeader"><span>CARD GAME APP</span></li>
+        <li className="navTab" onClick={notYetImplemented}>Resume Game In Progress</li>
         { sessionUser ? (
-          <li>
+          <li className="navTab">
               <NavLink to={`/users/${sessionUser.id}`} exact={true} activeClassName='active'>
                 Profile
               </NavLink>

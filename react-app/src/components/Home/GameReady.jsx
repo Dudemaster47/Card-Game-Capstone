@@ -14,6 +14,8 @@ function GameReady() {
 
     const sendDataToHome = (i) => {
         setEdited(i)
+        setEdited(false)
+        setEdited(true)
     }
 
     useEffect(() => {

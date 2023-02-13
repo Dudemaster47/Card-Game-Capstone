@@ -4,9 +4,12 @@ import { editGameThunk } from "../../store/games";
 
 function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
     const dispatch = useDispatch();
-	const [timeLimit, setTimeLimit] = useState("300");
-	const [gameType, setGameType] = useState("War");
+	const [timeLimit, setTimeLimit] = useState(game.timer);
+	const [gameType, setGameType] = useState(game.gameType);
 	const [errors, setErrors] = useState([]);
+
+	console.log(game.timer);
+	console.log(game.gameType)
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

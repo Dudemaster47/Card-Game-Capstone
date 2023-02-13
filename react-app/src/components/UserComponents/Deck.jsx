@@ -14,6 +14,8 @@ function Deck({deckID, deckArray}){
 
     const sendDataToDecks = (i) => {
         setEdited(i)
+        setEdited(false)
+        setEdited(true)
     }
     
     useEffect(() => {

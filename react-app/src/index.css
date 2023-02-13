@@ -2,6 +2,7 @@ body {
     background: #35654d;
     color: white;
     margin: 0;
+	font-family: sans-serif;
 }
 
 .input {
@@ -70,6 +71,10 @@ body {
 	z-index: 9999;
 	border-radius: 16px;
 	box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
 }
 
 .modalHeader {
@@ -115,6 +120,7 @@ body {
 
 .modalContent {
 	padding: 10px;
+	width: 50%;
 	font-size: 14px;
 	color: #2c3e50;
 	text-align: center;

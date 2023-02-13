@@ -14,17 +14,14 @@ const SignUpForm = () => {
 
   const onSignUp = async (e) => {
     e.preventDefault();
-    if(email.includes("@")){
-      if (password === repeatPassword) {
-        const data = await dispatch(signUp(username, email, password));
-        if (data) {
-          setErrors(data)
-        }
-      } else {
-        window.alert("password and repeat password do not match!")
+    if (password === repeatPassword) {
+      const data = await dispatch(signUp(username, email, password));
+      if (data) {
+        console.log(data)
+        setErrors(data)
       }
     } else {
-      window.alert("use an actual email address")
+      setErrors(["password: password and repeat password must match"])
     }
   };
 
@@ -99,7 +96,7 @@ const SignUpForm = () => {
             required={true}
           ></input>
         </div>
-        <button type='submit' className="mainButton">Sign Up</button>
+        <button className="mainButton" type='submit'>Sign Up</button>
       </form>
     </div>
   );

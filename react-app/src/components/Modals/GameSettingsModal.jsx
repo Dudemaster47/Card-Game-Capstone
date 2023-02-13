@@ -58,8 +58,8 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 									type="text"
 									name="time limit"
 									value={timeLimit}
-									placeholder={game?.timeLimit}
-									onChange={(e) => setTimeLimit(parseInt(e.target.value))}
+									placeholder={game.timeLimit}
+									onChange={(e) => setTimeLimit(parseInt(e.target.value) || 0)}
 								/>
 							</div>
 							<div className="input">
@@ -68,8 +68,10 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 									value={gameType}
 									onChange={(e) => setGameType(e.target.value)}
 								>
-									<option value="--">--</option>
 									<option value="War">War</option>
+									<option value="Gin Rummy">Gin Rummy</option>
+									<option value="Blackjack">Blackjack</option>
+									<option value="Spite & Malice">Spite & Malice</option>
 								</select>
 							</div>
 						</form>

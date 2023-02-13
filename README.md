@@ -37,6 +37,8 @@ The home page is variable, having different renders for when a user is logged ou
 
 The profile page is where the stuff that you show off to other players is managed. You can see your winning and losing statistics as well as manage which deck is to be used in game (that's also pending). That's really it.
 
+Also some of the image links I used ended up being bad links, but that can be fixed at a later date. Kind of low priority.
+
 
 ...So far, there's not really anything else. 
 

@@ -5,6 +5,7 @@ import UserStats from './UserComponents/UserStats';
 import DeckSelector from './UserComponents/DeckSelector';
 import EditUserProfileModal from './Modals/EditUserProfileModal';
 import { getUserThunk } from '../store/users';
+import "./user.css"
 
 function User() {
   const dispatch = useDispatch();
@@ -48,22 +49,26 @@ function User() {
   }
 
   return (
-    <>
-      <div>
-        <img src={user.profileImg} alt="profile" />
-      </div>
-      <div>
-        <h1>{user.username}'s Profile!</h1>
-      </div>
-      { sessionUser.id !== 1 ? (
-        <div>
-          <div><UserStats /></div>
-          <button className="mainButton" onClick={() => setIsOpen(true)}>Edit User Profile</button>
+    <div className="profilePage">
+      <div className="profileInfo">
+        <div className="pictureBox">
+          <img src={user.profileImg} alt="profile" className="profilePicture"/>
         </div>
-      ) : null
-      }
+        <div className="profileTitle">
+          <h1>{user.username}'s Profile!</h1>
+        </div>
+        { sessionUser.id !== 1 ? (
+          <div className="statsAndEditContainer">
+            <div class="outerStatsBox"><UserStats /></div>
+            <div class="buttonShrinker">
+              <button className="mainButton" onClick={() => setIsOpen(true)}>Edit User Profile</button>
+            </div>
+          </div>
+        ) : null
+        }
+      </div>
       { (sessionUser.id == userId) && (sessionUser.id !== 1) ? (
-        <div><DeckSelector user={sessionUser} /></div>
+        <div className="outerDeckSelector"><DeckSelector user={sessionUser} /></div>
       ): null
 
       }
@@ -74,7 +79,7 @@ function User() {
                     sendDataToUser={sendDataToUser}
                 />
       )}
-    </>
+    </div>
   );
 }
 export default User;

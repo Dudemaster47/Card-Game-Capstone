@@ -9,7 +9,12 @@ This is an app with which one can play card games against other people and compe
 
 ## Index
 
-to be filledi n when a wiki exists
+- [API DOCUMENTATION](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/API-ROUTES)
+- [DATABASE SCHEMA](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/Database-Schema)
+- [FRONTEND ROUTES](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/Front-End-Routes)
+- [USER STORIES](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/User-Stories)
+- [MVP LIST](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/MVP-LIST)
+- [OH GOD IT'S RECURSING](https://github.com/Dudemaster47/Card-Game-Capstone/wiki/README)
 
 ## Technologies Used
 

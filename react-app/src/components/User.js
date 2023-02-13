@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import UserStats from './UserComponents/UserStats';
 import DeckSelector from './UserComponents/DeckSelector';
+import EditUserProfileModal from './Modals/EditUserProfileModal';
+import { getUserThunk } from '../store/users';
 
 function User() {
+  const dispatch = useDispatch();
   const [user, setUser] = useState({});
+  const [edited, setEdited] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const { userId }  = useParams();
   const sessionUser = useSelector((state) => state.session.user);
+
+  const sendDataToUser = (i) => {
+    setEdited(i)
+    setEdited(false)
+    setEdited(true)
+}
 
   useEffect(() => {
     if (!userId) {
@@ -19,6 +30,18 @@ function User() {
       setUser(user);
     })();
   }, [userId]);
+
+  useEffect(() => {
+    dispatch(getUserThunk(userId))
+    if (!userId) {
+      return;
+    }
+    (async () => {
+      const response = await fetch(`/api/users/${userId}`);
+      const user = await response.json();
+      setUser(user);
+    })();
+}, [edited, dispatch, userId])
 
   if (!user) {
     return null;
@@ -35,7 +58,7 @@ function User() {
       { sessionUser.id !== 1 ? (
         <div>
           <div><UserStats /></div>
-          <button className="mainButton">Edit User Profile</button>
+          <button className="mainButton" onClick={() => setIsOpen(true)}>Edit User Profile</button>
         </div>
       ) : null
       }
@@ -44,6 +67,13 @@ function User() {
       ): null
 
       }
+      { isOpen && (
+                <EditUserProfileModal
+                    setIsOpen={setIsOpen}
+                    user={user}
+                    sendDataToUser={sendDataToUser}
+                />
+      )}
     </>
   );
 }

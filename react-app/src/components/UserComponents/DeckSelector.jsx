@@ -13,7 +13,6 @@ function DeckSelector({user}) {
     let deckArray = [defaultDeck].concat(realDeckArray)
     const sessionUser = useSelector((state) => state.session.user);
     const userId = sessionUser.id;
-    console.log(deckArray);
 
     useEffect(() => {
         dispatch(getAllDecksThunk(userId));

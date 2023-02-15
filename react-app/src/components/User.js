@@ -64,7 +64,13 @@ function User() {
               <button className="mainButton" onClick={() => setIsOpen(true)}>Edit User Profile</button>
             </div>
           </div>
-        ) : null
+        ) : (
+          <div>
+            <p>Profile Editing, Stat Tracking, and Deck Creation/Editing Not Available For Guest Users.</p>
+            <p>Log in or sign up to use these features!</p>
+            <strong>(This is an intentional restriction and deliberately turned off for Guest.)</strong>
+          </div>
+        )
         }
       </div>
       { (sessionUser.id == userId) && (sessionUser.id !== 1) ? (

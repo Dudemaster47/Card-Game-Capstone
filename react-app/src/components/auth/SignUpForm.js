@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../store/session';
+import { getAllUsersThunk } from '../../store/users';
 
 const SignUpForm = () => {
   const [errors, setErrors] = useState([]);
@@ -17,11 +18,13 @@ const SignUpForm = () => {
     if (password === repeatPassword) {
       const data = await dispatch(signUp(username, email, password));
       if (data) {
-        console.log(data)
         setErrors(data)
+      } else {
+        await dispatch (getAllUsersThunk())
       }
     } else {
-      setErrors(["password: password and repeat password must match"])
+      const data2 = await dispatch(signUp(username, email, "bad_password$$$912387132asdasdghkecbrv23787dfscbn2373721@#&#^BN7CN#&"));
+      setErrors(data2)
     }
   };
 

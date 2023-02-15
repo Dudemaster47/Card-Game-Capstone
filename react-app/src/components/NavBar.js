@@ -37,7 +37,9 @@ const NavBar = () => {
           </div>
         )}
         <li className="navHeader"><span>CARD GAME APP</span></li>
-        <li className="navTab" onClick={notYetImplemented}>Resume Game In Progress</li>
+        <li className="navTab" onClick={notYetImplemented}>
+          <p>Resume Game In Progress</p>
+        </li>
         { sessionUser ? (
           <li className="navTab">
               <NavLink to={`/users/${sessionUser.id}`} exact={true} activeClassName='active'>

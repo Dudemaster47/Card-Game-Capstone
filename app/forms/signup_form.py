@@ -18,10 +18,15 @@ def username_exists(form, field):
     user = User.query.filter(User.username == username).first()
     if user:
         raise ValidationError('Username is already in use.')
+    
+def bad_password(form, field):
+    password = field.data
+    if password == "bad_password$$$912387132asdasdghkecbrv23787dfscbn2373721@#&#^BN7CN#&":
+        raise ValidationError("password and repeat password must match")
 
 
 class SignUpForm(FlaskForm):
     username = StringField(
         'username', validators=[DataRequired(), username_exists])
     email = StringField('email', validators=[DataRequired(), user_exists, Email("this field requires a valid email address")])
-    password = StringField('password', validators=[DataRequired()])
+    password = StringField('password', validators=[DataRequired(), bad_password])

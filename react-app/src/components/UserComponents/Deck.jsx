@@ -11,6 +11,7 @@ function Deck({deckID, deckArray}){
     const [isOpen, setIsOpen] = useState(false);
     const [edited, setEdited] = useState(false);
     const [deleted, setDeleted] = useState(false);
+  
 
     const sendDataToDecks = (i) => {
         setEdited(i)

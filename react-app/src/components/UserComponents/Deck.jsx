@@ -4,21 +4,20 @@ import EditDeckModal from "../Modals/EditDeckModal";
 import { useEffect, useState } from "react";
 import { refreshSessionuser } from "../../store/session";
 
-function Deck({deckID, deckArray}){
+function Deck({deckID, deckArray, selector, select}){
     const dispatch = useDispatch();
     const sessionUser = useSelector((state) => state.session.user)
     const deck = deckArray.filter((el) => el.id === deckID)
     const [isOpen, setIsOpen] = useState(false);
     const [edited, setEdited] = useState(false);
     const [deleted, setDeleted] = useState(false);
-  
-
+    
     const sendDataToDecks = (i) => {
         setEdited(i)
         setEdited(false)
         setEdited(true)
     }
-    
+
     useEffect(() => {
             dispatch(refreshSessionuser(sessionUser.id));
             deckArray && setDeleted(false);
@@ -32,16 +31,31 @@ function Deck({deckID, deckArray}){
         setDeleted(true);
     }
 
-    const notYetImplemented = (e) => {
+    const deckSelection = (e) => {
         e.preventDefault();
-        window.alert("Give me a day and it'll be ready")
+        if (select !== deckID){
+            select = deckID
+            selector(select)
+        }
     }
 
     return (
         <div className = "innerSelectorBox">  
             { deck && (
                 <div className = "innerInnerSelectorBox">
-                    <div className = "deckInfoBox" onClick={notYetImplemented}>
+                    { select !== deckID ? (
+                        <div className = "deckInfoBox" onClick={deckSelection}>
+                            <div className = "deckPictureBox">
+                                <img src={deck[0].cardArt} alt={deck[0].cardArt} className="deckPicture" />
+                            </div>
+                            {deck[0].deckName ? (
+                                <p className="deckName">{deck[0].deckName}</p>
+                            ) : (
+                                <p className="deckName">Default Deck</p>
+                            )}
+                        </div>
+                    ) : (
+                        <div className = "deckInfoBoxSelected">
                         <div className = "deckPictureBox">
                             <img src={deck[0].cardArt} alt={deck[0].cardArt} className="deckPicture" />
                         </div>
@@ -51,6 +65,7 @@ function Deck({deckID, deckArray}){
                             <p className="deckName">Default Deck</p>
                         )}
                     </div>
+                    )}
                     
                     {deck[0].deckName ? (
                         <div className="deckButtonBox">

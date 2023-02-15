@@ -105,6 +105,18 @@
     transform: translateY(-10px);
 }
 
+.deckInfoBoxSelected {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:  1% 3% 0 1%;
+    width: 100%;
+    border-radius: 5px;
+    background: rgb(114, 162, 1);
+    color: black;
+
+}
+
 .innerInnerSelectorBox {
     display: flex;
     flex-direction: column;

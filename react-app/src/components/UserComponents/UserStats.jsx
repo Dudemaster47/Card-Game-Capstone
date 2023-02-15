@@ -6,11 +6,9 @@ function UserStats() {
 
     const users = useSelector((state) => state.users.users)
     let user;
-    console.log(users, "it must not be getting pulled from the database?")
 
     if (users){
         user = users.filter(el => el.id == userId)   
-        console.log(user, "but the dispatch should be fixing it????")
     }
 
     return (

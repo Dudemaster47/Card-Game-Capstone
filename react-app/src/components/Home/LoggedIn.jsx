@@ -14,6 +14,15 @@ function LoggedIn() {
     }
 
     useEffect(() => {
+        const userAndDeck = JSON.parse(localStorage.getItem('userAndDeck'))
+        if((userAndDeck[0] === sessionUser.id) && userAndDeck[1]){
+        } else {
+            const userAndDeckArray = [sessionUser.id, 0]
+            localStorage.setItem('userAndDeck', JSON.stringify(userAndDeckArray))
+        }
+    }, [])
+
+    useEffect(() => {
         dispatch(refreshSessionuser(sessionUser.id))
     }, [gameExists])
 

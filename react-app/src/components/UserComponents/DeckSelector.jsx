@@ -19,25 +19,29 @@ function DeckSelector({user}) {
         setSelected(select)
     };   
 
+    /* note to self: localstorage method used to save which deck belonging to a user is currently selected overwrites any other user's decks 
+    that may be stored locally. don't know if this will be a problem during multiplayer, but have resolved it so it resets the selected deck
+    to default when a new user checks their profile page. at the very least it shouldn't break anything now, but will need to return to this
+    and revise how it works eventually to ensure multiple users' decks can be stored locally.*/
+
     useEffect(() => {
         dispatch(getAllDecksThunk(userId));
         deckArray = [defaultDeck].concat(realDeckArray)
     }, [dispatch, userId, realDeckArray])
 
     useEffect(() => {
-        const currentDeckId = JSON.parse(localStorage.getItem('currentDeckId'))
-        if(currentDeckId){
-            console.log(currentDeckId, "checking")
-            setSelected(currentDeckId)
+        const userAndDeck = JSON.parse(localStorage.getItem('userAndDeck'))
+        if((userAndDeck[0] === userId) && userAndDeck[1]){
+            setSelected(userAndDeck[1])
         } else {
             setSelected(0)
         }
     }, [])
 
     useEffect(() => {
-
-        localStorage.setItem('currentDeckId', JSON.stringify(selected))
-    }, [selected]);
+        const userAndDeckArray = [userId, selected]
+        localStorage.setItem('userAndDeck', JSON.stringify(userAndDeckArray))
+    }, [selected, userId]);
 
 
     return (

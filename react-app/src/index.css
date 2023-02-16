@@ -45,6 +45,28 @@ body {
     cursor: grabbing;
 }
 
+.mainButton:Disabled {
+    margin: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 12px;
+    flex-wrap: wrap;
+    background:rgb(86, 74, 74);
+    box-shadow: 5px 5px 0px rgb(75, 0, 0);
+    border-radius: 10px;
+    color: white;
+    border: outset 2px white;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    padding: 2%;
+    box-sizing: border-box;
+}
+
 .darkBG {
     background-color: rgba(0, 0, 0, 0.2);
 	width: 100vw;

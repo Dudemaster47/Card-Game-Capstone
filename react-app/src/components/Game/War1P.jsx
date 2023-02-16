@@ -9,6 +9,9 @@ function War1P() {
     const [computerDiscard, setComputerDiscard] = useState([]);
     const [playerInPlay, setPlayerInPlay] = useState([]);
     const [computerInPlay, setComputerInPlay] = useState([]);
+    const [turnAlert, setTurnAlert] = useState(false);
+    const [tieAlert, setTieAlert] = useState(false);
+    const [tieCounter, setTieCounter] = useState(0);
 
     const shuffle = (intlDeck, fnlDeck) => {
         if(intlDeck.length > 0){
@@ -51,26 +54,71 @@ function War1P() {
         shifts the first element of each into their respective IN PLAY states.
         replaces the deck state with the now shortened shallow copy
         compares the value of the two in play cards
-        if one is greater than the other, outputs a div that says which one won
-        if there's a tie, outputs a div that announces a tie
+        if one is greater than the other, opens a div that says which one won
+        if there's a tie, opens a div that announces a tie
         */
+    }
+
+    const endTurn = (e) => {
+        e.preventDefault();
+        //moves in play cards to the winner's discard pile
+        //then removes the announcement window and re-enables the advance turn button.
+    }
+
+    const tieBreak = (e) => {
+        e.preventDefault();
+        //acts as Advance Turn does but adds three more cards to each In Play state. 
+        //only the final cards added are compared. 
+        //if one card is greater than another, it moves to the winner announcement
+        //if there's a tie again, another tiebreaker must occur. repeat until the tie is broken
+        //maybe count how many ties occur in a row to be smarmier in the announcement box each time
+        //that means more state tho...
     }
 
     return(
         <>
             <div>
                 <p>OPPONENT PLAY AREA</p>
+                <div>OPPONENT PROFILE</div>
                 <div>OPPONENT DISCARD PILE</div>
                 <div>OPPONENT DECK</div>
                 <div>OPPONENT IN PLAY</div>
             </div>
             <div>
-                <button onClick={advanceTurn} className="mainButton">ADVANCE TURN</button>
+                <div>
+                    <p>ANNOUNCEMENTS</p>
+                    {turnAlert ? (
+                        <div>
+                            <p>
+                                Says which side won
+                            </p>
+                            <button className="mainButton">CONTINUE</button>
+                        </div>
+                    ) : null}
+                    {tieAlert ? (
+                        <div>
+                            <p>
+                                It's a tie!
+                            </p>
+                            <button className="mainButton">TIEBREAK!</button>
+                        </div>
+                    ) : null}
+                </div>
+                {(!turnAlert && !tieAlert) ? (
+                    <div>
+                        <button onClick={advanceTurn} className="mainButton">ADVANCE TURN</button>
+                    </div>
+                ) : (
+                    <div>
+                        <button className="mainButton" disabled>DISABLED</button>
+                    </div>
+                )}
             </div>
             <div>
                 <div>PLAYER IN PLAY</div>
                 <div>PLAYER DECK</div>
                 <div>PLAYER DISCARD PILE</div>
+                <div>PLAYER PROFILE</div>
                 <p>PLAYER PLAY AREA</p>
             </div>
         </>

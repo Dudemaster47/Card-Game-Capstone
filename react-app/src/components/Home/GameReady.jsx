@@ -3,6 +3,7 @@ import { deleteGameThunk } from "../../store/games";
 import GameSettingsModal from "../Modals/GameSettingsModal";
 import { useState, useEffect } from "react";
 import { refreshSessionuser } from "../../store/session";
+import { Link } from "react-router-dom";
 
 function GameReady() {
     const sessionUser = useSelector((state) => state.session.user);
@@ -42,7 +43,7 @@ function GameReady() {
                     <div>Time Limit: {sessionUser.createdGames[0].timer}</div>
                     <div>Game Type: {sessionUser.createdGames[0].gameType}</div>
                 </div>
-                <button onClick={notYetImplemented} className="mainButton">1P GAME START</button>
+                <Link to={`/games/${sessionUser.createdGames[0].id}`} className="mainButton">1P GAME START</Link>
                 <button onClick={notYetImplemented} className="mainButton">2P GAME HOST</button>
                 <button onClick={() => setIsOpen(true)} className="mainButton">GAME SETTINGS</button>
                 <button onClick={deleteGame} className="mainButton">DELETE GAME</button>

@@ -1,0 +1,72 @@
+GAME PAGE
+
+/games/:gameId
+
+Important for multiplayer: 1P Games and 2P Games should not be possible to overlap. Entering a 1P game should make it ineligible for 2P games. Hosting a 2P game should lock it out from being a 1P game. 
+
+Probably handle this while setting up multiplayer. Right now I don’t know how websocket works, assuming things may only cause problems for later to resolve.
+
+The game page functions similarly to the Home page, being largely there to be an outer component for mutually exclusive sub-components that handle different game types. Certain elements of the UI that are independent of game type should also be hosted here:
+Timer (For game types that use it)
+Forfeit Button
+Pause Button
+Suspend Button
+
+
+
+FUNCTIONALITY FOR 1P COMPONENT
+
+Determine selected deckId from Localstorage. If deckId is 0 or undefined, the deck is Default. 
+probably should set deckId to default in localstorage ON SIGN UP to prevent weirdness? Additionally, the guest should also set deckId to default on logging in as guest. Again, to prevent weirdness. The seeded users potentially don’t need it? 
+tbh until i figure out storing multiple users i think it’s necessary to set their deck to default on logging in. I’ll put a note about it on the HELP page.
+
+
+
+ANYWAY. 
+
+Once DeckId is selected, take all the cards from that deck (it really doesn’t matter which deck but might as well) and push them into two equal arrays labeled PLAYER DECK and COMPUTER DECK. These two decks are then shuffled. 
+Two more empty arrays called PLAYER HAND and COMPUTER HAND are initialized
+A third set of empty arrays called PLAYER IN PLAY and COMPUTER IN PLAY are initialized.
+A fourth set of empty arrays called PLAYER DISCARD and COMPUTER DISCARD are initialized. 
+
+
+DO THESE NEED TO BE STATE? NOTES:
+State behaves asynchronously and all of these are related to each other. 
+All of these interactions beyond deck initialization occur as button presses that are sequential, so the asynchronicity shouldn’t matter TOO much as long as you can’t change the next state value in sequence until the one before it has been changed and must be done manually.
+The HAND card is kind of clunky to use for WAR gametype but it provides a basis for later rulesets and for tiebreakers (?)
+	IS it useful here? Adding an extra button press between drawing a card and playing it may be more clunky and overcomplicated than it’s worth. Additionally, Game Types should logically be mutually exclusive components that run on different progressions; War is a proof of concept, yes, but it doesn’t need to have extra stuff going on behind the scenes that serves no purpose.
+
+THE TIMER
+
+Research must be done on how to implement setTimeouts that display in React. I do not think it will be hard. When the timer hits 0, the game ends.
+
+
+
+PLAYING THE GAME
+
+IF we are not using a hand, then the flow is simple:
+
+The game screen shows the COMPUTER DECK and COMPUTER DISCARD PILE on the top right of the screen, and the PLAYER DECK AND PLAYER DISCARD PILE on the bottom right of the screen. The game screen has a button saying PLAY TURN in the center of the playing field. 
+
+CLICKING PLAY TURN removes the TOP CARD from both Computer and Player’s DECK slices of state and renders them opposing each other in the IN PLAY component, placing these values in the IN PLAY slice of state. Then it compares the value of the cards and announces who wins the turn, with a button or means to continue from there alongside the announcement. 
+
+Continuing from the announcement moves both cards from IN PLAY into the winning player’s discard pile, both rendered and in state. Then the process repeats from the start.
+
+If there is a TIE during the IN PLAY portion, the two FACE DOWN (deck card art is displayed) cards are moved from the deck onto the IN PLAY component and state, and then a FACE UP (card card art is displayed) is placed on top. Then it is determined whether there is another tie, or if there is a winner. If there’s another tie, the process repeats until there is a winner and the spoils all go to the winner.
+
+IF AT ANY POINT, a player’s DECK state is emptied, their DISCARD PILE is pushed into the deck state and then shuffled. If a player’s (or computer’s) DECK and DISCARD PILE are emptied at the same time, the game ends.
+
+
+ENDING THE GAME
+
+The game ends and a winner is determined by who has the most combined cards in their DECK, DISCARD PILE, and IN PLAY under three conditions:
+
+1. Time runs out.
+2. A player forfeits
+3. A player no longer has any playable cards.
+
+In the event of a tie, a sudden death tiebreaker round will determine the victor- this is a single turn, with whoever wins the draw being determined the victor.
+
+ONCE THE GAME IS OVER:
+
+A results screen is displayed and  the Player’s Wins and Losses scores are updated. This results screen will have a button to return them to home, deleting the game room in the process.

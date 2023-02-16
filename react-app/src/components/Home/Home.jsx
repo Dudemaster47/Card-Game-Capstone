@@ -3,7 +3,6 @@ import LoggedOut from './LoggedOut';
 import LoggedIn from './LoggedIn';
 import GameReady from './GameReady';
 import "./home.css"
-import { Link } from 'react-router-dom';
 
 
 function Home() {

@@ -45,7 +45,7 @@ body {
     cursor: grabbing;
 }
 
-.mainButton:Disabled {
+.mainButtonDisabled {
     margin: 1%;
     display: flex;
     align-items: center;

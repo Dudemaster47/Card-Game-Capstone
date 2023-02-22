@@ -138,6 +138,9 @@ function War1P() {
         setTurnAlert(false);
     }
 
+    // put the turn ending stuff here
+    // im just not in the right space to do work today
+
     return(
         <>
             <div>

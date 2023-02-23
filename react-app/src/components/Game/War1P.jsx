@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import { deleteGameThunk } from "../../store/games";
+import { editUserThunk } from "../../store/users";
 
 function War1P() {
+    const history = useHistory()
+    const { gameId } = useParams()
     const sessionUser = useSelector((state) => state.session.user);
     const [playerDeck, setPlayerDeck] = useState([]);
     const [computerDeck, setComputerDeck] = useState([]);
@@ -12,6 +17,9 @@ function War1P() {
     const [turnAlert, setTurnAlert] = useState(false);
     const [tieAlert, setTieAlert] = useState(false);
     const [tieCounter, setTieCounter] = useState(0);
+    const [gameOver, setGameOver] = useState(false);
+    const [playerWin, setPlayerWin] = useState(false);
+    const [playerLose, setPlayerLose] = useState(false);
 
     const shuffle = (intlDeck, fnlDeck) => {
         if(intlDeck.length > 0){
@@ -52,6 +60,54 @@ function War1P() {
             setTieAlert(true);
         }
     };
+
+    const endDaGame = () => {
+        if (playerWin) {
+            //um. fuck this has to write to the database. ugh. i actually need a specialized form and thunk for this. rip me.
+            let wins = (sessionUser.wins + 1)
+            let losses = (sessionUser.losses)
+            let editedUser = { wins: wins, losses: losses }
+            editUserThunk(editedUser);
+        } else if (playerLose) {
+            //um. fuck this has to write to the database. ugh. i actually need a specialized form and thunk for this. rip me.
+            let wins = (sessionUser.wins)
+            let losses = (sessionUser.losses + 1)
+            let editedUser = { wins: wins, losses: losses }
+            editUserThunk(editedUser);
+        }
+        deleteGameThunk(gameId);
+        history.push('/');
+    }
+
+    const deckCheck = () => {
+     // DECK CHECK. 
+    // it checks before cards are drawn to see if there are 0 cards in the deck
+    // if there are 0 cards it checks the discard pickle
+    // if there are cards in the discard pcikle it, put them in a shallow copy, shuffle that copy, flatten that shuffle, then put that shit
+    // IN THE DECK
+    // and make the disclard pickle into an empty array
+    // BUT IF THE DISCARD PILE IS ZERO AND THE DECK IS ZRO.LENGTH
+    // OHH BABY THAT MEANS THE GAME
+    // IS OVARRRRR
+        if (playerDeck.length === 0 && playerDiscard.length !== 0){
+            let shallowCopy = playerDiscard;
+            let shuffledDeck = [];
+            shuffle(shallowCopy, shuffledDeck);
+            shuffledDeck = shuffledDeck.flat();
+            setPlayerDeck(shuffledDeck);
+        } else if (playerDeck.length === 0 && playerDiscard.length === 0){
+            setGameOver(true);
+        }
+        if (computerDeck.length === 0 && computerDiscard.length !== 0){
+            let shallowCopy = computerDiscard;
+            let shuffledDeck = [];
+            shuffle(shallowCopy, shuffledDeck);
+            shuffledDeck = shuffledDeck.flat();
+            setComputerDeck(shuffledDeck);
+        } else if (computerDeck.length === 0 && computerDiscard.length === 0){
+            setGameOver(true);
+        }
+    }
 
     const discard = () => {
         // this just handles where cards go after a winner of a turn is decided
@@ -138,8 +194,7 @@ function War1P() {
         setTurnAlert(false);
     }
 
-    // put the turn ending stuff here
-    // im just not in the right space to do work today
+
 
     return(
         <>
@@ -214,8 +269,34 @@ function War1P() {
                                 }}>TIEBREAK!</button>
                         </div>
                     ) : null}
+                    { gameOver ? (
+                        <div>
+                            {(playerDeck.length + playerDiscard.length + playerInPlay.length) > (computerDeck.length + computerDiscard.length + computerInPlay.length) ? (
+                                <div>
+                                    <p>
+                                        Player wins!
+                                    </p>
+                                    <button className="mainButton" onClick={endDaGame}>END GAME</button>
+                                </div>
+                            ) : (playerDeck.length + playerDiscard.length + playerInPlay.length) < (computerDeck.length + computerDiscard.length + computerInPlay.length) ? (
+                                <div>
+                                    <p>
+                                        Computer wins!
+                                    </p>
+                                    <button className="mainButton" onClick={endDaGame}>END GAME</button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <p>
+                                        It's a tie!
+                                    </p>
+                                    <button className="mainButton">SUDDEN DEATH!!!</button>
+                                </div>
+                            )}
+                        </div>
+                    ) : null }
                 </div>
-                {(!turnAlert && !tieAlert) ? (
+                {(!turnAlert && !tieAlert && !gameOver) ? (
                     <div>
                         <button onClick={(e) => {
                             advanceTurn(e)

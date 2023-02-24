@@ -8,6 +8,7 @@ function War1P() {
     const history = useHistory()
     const { gameId } = useParams()
     const sessionUser = useSelector((state) => state.session.user);
+    const suddenDeathDeck = useSelector((state) => state.defaultDeck.deck);
     const [playerDeck, setPlayerDeck] = useState([]);
     const [computerDeck, setComputerDeck] = useState([]);
     const [playerDiscard, setPlayerDiscard] = useState([]);
@@ -20,6 +21,10 @@ function War1P() {
     const [gameOver, setGameOver] = useState(false);
     const [playerWin, setPlayerWin] = useState(false);
     const [playerLose, setPlayerLose] = useState(false);
+
+    // note to self: ask for help un-spaghetti-ing this
+    // namely: deck check doesn't work due to how state functions and i'm having trouble figuring out how to work around that issue when it comes
+    // to reshuffling decks
 
     const shuffle = (intlDeck, fnlDeck) => {
         if(intlDeck.length > 0){
@@ -35,7 +40,7 @@ function War1P() {
     useEffect(() => {
         const userAndDeck = JSON.parse(localStorage.getItem('userAndDeck'))
         let deck;
-        let deckCards;
+        let deckCards = [];
         let shuffledDeck = [];
         let deckHalf1 = [];
         let deckHalf2 = [];
@@ -44,7 +49,7 @@ function War1P() {
         } else {
             deck = sessionUser.decks.filter((el) => el.id === userAndDeck[1]) 
         }
-        deckCards = deck[0].cards;
+        deckCards = deck[0].cards.slice();
         shuffle(deckCards, shuffledDeck);
         shuffledDeck = shuffledDeck.flat();
         deckHalf1 = shuffledDeck.slice(0, 26);
@@ -52,6 +57,35 @@ function War1P() {
         setPlayerDeck(deckHalf1);
         setComputerDeck(deckHalf2);
     }, []);
+
+    const suddenDeathChecker = () => {
+        let playerDiscardCopy = playerDiscard.slice();
+        let computerDiscardCopy = computerDiscard.slice();
+        if(playerInPlay[0].value > computerInPlay[0].value) {
+            playerDiscardCopy = playerDiscardCopy.concat(playerInPlay);
+            playerDiscardCopy = playerDiscardCopy.concat(computerInPlay);
+        }
+        else if (playerInPlay[0].value < computerInPlay[0].value){
+            computerDiscardCopy = computerDiscardCopy.concat(computerInPlay);
+            computerDiscardCopy = computerDiscardCopy.concat(playerInPlay);
+        }
+        setPlayerDiscard(playerDiscardCopy);
+        setComputerDiscard(computerDiscardCopy);
+        setPlayerInPlay([]);
+        setComputerInPlay([]);
+        setGameOver(true);
+    }
+
+    const suddenDeath = () => {
+        let deck = [];
+        let shuffledDeck = [];
+        deck = suddenDeathDeck.cards.slice();
+        shuffle(deck, shuffledDeck);
+        shuffledDeck = shuffledDeck.flat();
+        setPlayerInPlay(shuffledDeck.shift());
+        setComputerInPlay(shuffledDeck.shift());
+        suddenDeathChecker()
+    }
 
     const inPlayChecker = (card1, card2) => {
         if(card1.value !== card2.value) {
@@ -94,6 +128,7 @@ function War1P() {
             let shuffledDeck = [];
             shuffle(shallowCopy, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
+            console.log(shuffledDeck, "THIS IS THE PLAYER'S NEW DICK")
             setPlayerDeck(shuffledDeck);
         } else if (playerDeck.length === 0 && playerDiscard.length === 0){
             setGameOver(true);
@@ -103,6 +138,7 @@ function War1P() {
             let shuffledDeck = [];
             shuffle(shallowCopy, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
+            console.log(shuffledDeck, "THIS IS THE COMPUTER'S NEW DICK")
             setComputerDeck(shuffledDeck);
         } else if (computerDeck.length === 0 && computerDiscard.length === 0){
             setGameOver(true);
@@ -111,8 +147,8 @@ function War1P() {
 
     const discard = () => {
         // this just handles where cards go after a winner of a turn is decided
-        let playerDiscardCopy = playerDiscard;
-        let computerDiscardCopy = computerDiscard;
+        let playerDiscardCopy = playerDiscard.slice();
+        let computerDiscardCopy = computerDiscard.slice();
         if(playerInPlay[0].value > computerInPlay[0].value) {
             playerDiscardCopy = playerDiscardCopy.concat(playerInPlay);
             playerDiscardCopy = playerDiscardCopy.concat(computerInPlay);
@@ -124,7 +160,7 @@ function War1P() {
         setPlayerDiscard(playerDiscardCopy);
         setComputerDiscard(computerDiscardCopy);
         setPlayerInPlay([]);
-        setComputerInPlay([])
+        setComputerInPlay([]);
     }
 
     const tieBreak = (e) => {
@@ -137,23 +173,24 @@ function War1P() {
         //that means more state tho...
         let tieUpdate = tieCounter + 1
         setTieCounter(tieUpdate);
-        let shallowDeck1 = playerDeck;
-        let shallowDeck2 = computerDeck;
-        let inPlay1 = playerInPlay;
-        let inPlay2 = computerInPlay;
+        let shallowDeck1 = playerDeck.slice();
+        let shallowDeck2 = computerDeck.slice();
+        let inPlay1 = playerInPlay.slice();
+        let inPlay2 = computerInPlay.slice();
         for(let i = 0; i < 3; i++){
-            if(shallowDeck1.length > 0){
+            deckCheck();
+            if(!gameOver){
                 inPlay1.push(shallowDeck1.shift());
-            }
-            if(shallowDeck2.length > 0){
                 inPlay2.push(shallowDeck2.shift());
             }
         }
-        setPlayerInPlay(inPlay1);
-        setComputerInPlay(inPlay2);
-        setPlayerDeck(shallowDeck1);
-        setComputerDeck(shallowDeck2);
-        inPlayChecker(inPlay1[(inPlay1.length - 1)], inPlay2[(inPlay2.length - 1)]);
+        if(!gameOver){
+            setPlayerInPlay(inPlay1);
+            setComputerInPlay(inPlay2);
+            setPlayerDeck(shallowDeck1);
+            setComputerDeck(shallowDeck2);
+            inPlayChecker(inPlay1[(inPlay1.length - 1)], inPlay2[(inPlay2.length - 1)]);
+        }
     }
  
 
@@ -167,17 +204,20 @@ function War1P() {
         if one is greater than the other, opens a div that says which one won
         if there's a tie, opens a div that announces a tie
         */
-        let shallowDeck1 = playerDeck;
-        let shallowDeck2 = computerDeck;
+       let shallowDeck1 = playerDeck.slice();
+       let shallowDeck2 = computerDeck.slice();
+       deckCheck();
+       if(!gameOver){
         let inPlay1 = []
         let inPlay2 = []
-        inPlay1.push(shallowDeck1.shift())
-        inPlay2.push(shallowDeck2.shift())
-        setPlayerInPlay(inPlay1)
-        setComputerInPlay(inPlay2);
-        setPlayerDeck(shallowDeck1);
-        setComputerDeck(shallowDeck2);
-        inPlayChecker(inPlay1[0], inPlay2[0])
+            inPlay1.push(shallowDeck1.shift())
+            inPlay2.push(shallowDeck2.shift())
+            setPlayerInPlay(inPlay1)
+            setComputerInPlay(inPlay2);
+            setPlayerDeck(shallowDeck1);
+            setComputerDeck(shallowDeck2);
+            inPlayChecker(inPlay1[0], inPlay2[0])
+        }
     }
 
     // alright. problem. the setInPlay state methods do not update the in play state "fast" enough for me to. immediately turn
@@ -276,21 +316,30 @@ function War1P() {
                                     <p>
                                         Player wins!
                                     </p>
-                                    <button className="mainButton" onClick={endDaGame}>END GAME</button>
+                                    <button className="mainButton" onClick={(e) => {
+                                        setPlayerWin(true);
+                                        endDaGame(e);
+                                    }}>END GAME</button>
                                 </div>
                             ) : (playerDeck.length + playerDiscard.length + playerInPlay.length) < (computerDeck.length + computerDiscard.length + computerInPlay.length) ? (
                                 <div>
                                     <p>
                                         Computer wins!
                                     </p>
-                                    <button className="mainButton" onClick={endDaGame}>END GAME</button>
+                                    <button className="mainButton" onClick={(e) => {
+                                        setPlayerLose(true);
+                                        endDaGame(e);
+                                    }}>END GAME</button>
                                 </div>
                             ) : (
                                 <div>
                                     <p>
                                         It's a tie!
                                     </p>
-                                    <button className="mainButton">SUDDEN DEATH!!!</button>
+                                    <button className="mainButton" onClick={(e) => {
+                                        setGameOver(false);
+                                        suddenDeath(e);
+                                    }}>SUDDEN DEATH!!!</button>
                                 </div>
                             )}
                         </div>

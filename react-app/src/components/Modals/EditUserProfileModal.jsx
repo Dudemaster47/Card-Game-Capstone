@@ -17,7 +17,9 @@ function EditUserProfileModal({setIsOpen, user, sendDataToUser}) {
 			id: user.id,
             username: username,
             email: email,
-            profile_img: profileImg
+            profile_img: profileImg,
+			wins: user.wins,
+			losses: user.losses
 		};
 		let data = await dispatch(editUserThunk(editedUser));
 		if (data) {

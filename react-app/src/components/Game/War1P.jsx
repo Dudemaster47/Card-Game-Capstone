@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { deleteGameThunk } from "../../store/games";
 import { editUserThunk } from "../../store/users";
+import { refreshSessionuser } from "../../store/session";
+import { getAllUsersThunk } from "../../store/users";
 
 function War1P() {
     const history = useHistory()
+    const dispatch = useDispatch()
     const { gameId } = useParams()
     const sessionUser = useSelector((state) => state.session.user);
     const suddenDeathDeck = useSelector((state) => state.defaultDeck.deck);
@@ -19,8 +22,8 @@ function War1P() {
     const [tieAlert, setTieAlert] = useState(false);
     const [tieCounter, setTieCounter] = useState(0);
     const [gameOver, setGameOver] = useState(false);
-    const [playerWin, setPlayerWin] = useState(false);
-    const [playerLose, setPlayerLose] = useState(false);
+    let winCheck = false;
+    let loseCheck = false;
 
     // note to self: ask for help un-spaghetti-ing this
     // namely: deck check doesn't work due to how state functions and i'm having trouble figuring out how to work around that issue when it comes
@@ -49,7 +52,7 @@ function War1P() {
         } else {
             deck = sessionUser.decks.filter((el) => el.id === userAndDeck[1]) 
         }
-        deckCards = deck[0].cards.slice();
+        deckCards = deck.cards.slice();
         shuffle(deckCards, shuffledDeck);
         shuffledDeck = shuffledDeck.flat();
         deckHalf1 = shuffledDeck.slice(0, 26);
@@ -96,24 +99,25 @@ function War1P() {
     };
 
     const endDaGame = () => {
-        if (playerWin) {
-            //um. fuck this has to write to the database. ugh. i actually need a specialized form and thunk for this. rip me.
+        if (winCheck) {
             let wins = (sessionUser.wins + 1)
             let losses = (sessionUser.losses)
-            let editedUser = { wins: wins, losses: losses }
-            editUserThunk(editedUser);
-        } else if (playerLose) {
-            //um. fuck this has to write to the database. ugh. i actually need a specialized form and thunk for this. rip me.
+            let editedUser = { id: sessionUser.id, username: sessionUser.username, email: sessionUser.email, profile_img: sessionUser.profileImg, wins: wins, losses: losses }
+            dispatch(editUserThunk(editedUser));
+        } else if (loseCheck) {
             let wins = (sessionUser.wins)
             let losses = (sessionUser.losses + 1)
-            let editedUser = { wins: wins, losses: losses }
-            editUserThunk(editedUser);
+            let editedUser = { id: sessionUser.id, username: sessionUser.username, email: sessionUser.email, profile_img: sessionUser.profileImg, wins: wins, losses: losses }
+            dispatch(editUserThunk(editedUser));
         }
-        deleteGameThunk(gameId);
+        let gameData = {id: gameId}
+        dispatch(deleteGameThunk(gameData));
+        dispatch(refreshSessionuser(sessionUser.id));
+        dispatch(getAllUsersThunk())
         history.push('/');
     }
 
-    const deckCheck = () => {
+    const deckCheck = (deck1, deck2, gOBool) => {
      // DECK CHECK. 
     // it checks before cards are drawn to see if there are 0 cards in the deck
     // if there are 0 cards it checks the discard pickle
@@ -123,37 +127,44 @@ function War1P() {
     // BUT IF THE DISCARD PILE IS ZERO AND THE DECK IS ZRO.LENGTH
     // OHH BABY THAT MEANS THE GAME
     // IS OVARRRRR
-        if (playerDeck.length === 0 && playerDiscard.length !== 0){
-            let shallowCopy = playerDiscard;
+        if (deck1.length === 0 && playerDiscard.length !== 0){
+            let shallowCopy = playerDiscard.slice();
             let shuffledDeck = [];
             shuffle(shallowCopy, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
-            console.log(shuffledDeck, "THIS IS THE PLAYER'S NEW DICK")
             setPlayerDeck(shuffledDeck);
-        } else if (playerDeck.length === 0 && playerDiscard.length === 0){
+            setPlayerDiscard([])
+            deck1 = shuffledDeck;
+  
+        } else if (deck1.length === 0 && playerDiscard.length === 0){
             setGameOver(true);
+            gOBool = true;
         }
-        if (computerDeck.length === 0 && computerDiscard.length !== 0){
-            let shallowCopy = computerDiscard;
+        if (deck2.length === 0 && computerDiscard.length !== 0){
+            let shallowCopy = computerDiscard.slice();
             let shuffledDeck = [];
             shuffle(shallowCopy, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
-            console.log(shuffledDeck, "THIS IS THE COMPUTER'S NEW DICK")
             setComputerDeck(shuffledDeck);
-        } else if (computerDeck.length === 0 && computerDiscard.length === 0){
+            setComputerDiscard([])
+            deck2 = shuffledDeck;
+            
+        } else if (deck2.length === 0 && computerDiscard.length === 0){
             setGameOver(true);
+            gOBool = true;
         }
+        return [deck1, deck2, gOBool];
     }
 
     const discard = () => {
         // this just handles where cards go after a winner of a turn is decided
         let playerDiscardCopy = playerDiscard.slice();
         let computerDiscardCopy = computerDiscard.slice();
-        if(playerInPlay[0].value > computerInPlay[0].value) {
+        if(playerInPlay[playerInPlay.length - 1].value > computerInPlay[computerInPlay.length - 1].value) {
             playerDiscardCopy = playerDiscardCopy.concat(playerInPlay);
             playerDiscardCopy = playerDiscardCopy.concat(computerInPlay);
         }
-        else {
+        else if(playerInPlay[playerInPlay.length - 1].value < computerInPlay[computerInPlay.length - 1].value){
             computerDiscardCopy = computerDiscardCopy.concat(computerInPlay);
             computerDiscardCopy = computerDiscardCopy.concat(playerInPlay);
         }
@@ -177,14 +188,17 @@ function War1P() {
         let shallowDeck2 = computerDeck.slice();
         let inPlay1 = playerInPlay.slice();
         let inPlay2 = computerInPlay.slice();
+        let gOBool = false
         for(let i = 0; i < 3; i++){
-            deckCheck();
-            if(!gameOver){
+            deckCheck(shallowDeck1, shallowDeck2, gOBool);
+            if(!deckCheck(shallowDeck1, shallowDeck2, gOBool)[2]){
+                shallowDeck1 = deckCheck(shallowDeck1, shallowDeck2)[0]
+                shallowDeck2 = deckCheck(shallowDeck1, shallowDeck2)[1]
                 inPlay1.push(shallowDeck1.shift());
                 inPlay2.push(shallowDeck2.shift());
             }
         }
-        if(!gameOver){
+        if(!deckCheck(shallowDeck1, shallowDeck2, gOBool)[2]){
             setPlayerInPlay(inPlay1);
             setComputerInPlay(inPlay2);
             setPlayerDeck(shallowDeck1);
@@ -206,8 +220,11 @@ function War1P() {
         */
        let shallowDeck1 = playerDeck.slice();
        let shallowDeck2 = computerDeck.slice();
-       deckCheck();
-       if(!gameOver){
+       let gOBool = false;
+       deckCheck(shallowDeck1, shallowDeck2, gOBool);
+       if(!deckCheck(shallowDeck1, shallowDeck2, gOBool)[2]){
+        shallowDeck1 = deckCheck(shallowDeck1, shallowDeck2)[0]
+        shallowDeck2 = deckCheck(shallowDeck1, shallowDeck2)[1]
         let inPlay1 = []
         let inPlay2 = []
             inPlay1.push(shallowDeck1.shift())
@@ -216,7 +233,7 @@ function War1P() {
             setComputerInPlay(inPlay2);
             setPlayerDeck(shallowDeck1);
             setComputerDeck(shallowDeck2);
-            inPlayChecker(inPlay1[0], inPlay2[0])
+            inPlayChecker(inPlay1[inPlay1.length - 1], inPlay2[inPlay2.length - 1])
         }
     }
 
@@ -317,7 +334,7 @@ function War1P() {
                                         Player wins!
                                     </p>
                                     <button className="mainButton" onClick={(e) => {
-                                        setPlayerWin(true);
+                                        winCheck = true;
                                         endDaGame(e);
                                     }}>END GAME</button>
                                 </div>
@@ -327,7 +344,7 @@ function War1P() {
                                         Computer wins!
                                     </p>
                                     <button className="mainButton" onClick={(e) => {
-                                        setPlayerLose(true);
+                                        loseCheck = true;
                                         endDaGame(e);
                                     }}>END GAME</button>
                                 </div>

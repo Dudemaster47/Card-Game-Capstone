@@ -10,8 +10,11 @@ function War1P() {
     const history = useHistory()
     const dispatch = useDispatch()
     const { gameId } = useParams()
+    const games = useSelector((state) => state.games)
+    const thisGame = games[gameId]
     const sessionUser = useSelector((state) => state.session.user);
     const suddenDeathDeck = useSelector((state) => state.defaultDeck.deck);
+    const [timeLeft, setTimeLeft] = useState(thisGame.timer);
     const [playerDeck, setPlayerDeck] = useState([]);
     const [computerDeck, setComputerDeck] = useState([]);
     const [playerDiscard, setPlayerDiscard] = useState([]);
@@ -22,6 +25,7 @@ function War1P() {
     const [tieAlert, setTieAlert] = useState(false);
     const [tieCounter, setTieCounter] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    const [pause, setPause] = useState(false);
     let winCheck = false;
     let loseCheck = false;
 
@@ -61,16 +65,16 @@ function War1P() {
         setComputerDeck(deckHalf2);
     }, []);
 
-    const suddenDeathChecker = () => {
+    const suddenDeathChecker = (card1, card2) => {
         let playerDiscardCopy = playerDiscard.slice();
         let computerDiscardCopy = computerDiscard.slice();
-        if(playerInPlay[0].value > computerInPlay[0].value) {
-            playerDiscardCopy = playerDiscardCopy.concat(playerInPlay);
-            playerDiscardCopy = playerDiscardCopy.concat(computerInPlay);
+        if(card1.value > card2.value) {
+            playerDiscardCopy = playerDiscardCopy.concat(card1);
+            playerDiscardCopy = playerDiscardCopy.concat(card2);
         }
-        else if (playerInPlay[0].value < computerInPlay[0].value){
-            computerDiscardCopy = computerDiscardCopy.concat(computerInPlay);
-            computerDiscardCopy = computerDiscardCopy.concat(playerInPlay);
+        else if (card1.value < card2.value){
+            computerDiscardCopy = computerDiscardCopy.concat(card1);
+            computerDiscardCopy = computerDiscardCopy.concat(card2);
         }
         setPlayerDiscard(playerDiscardCopy);
         setComputerDiscard(computerDiscardCopy);
@@ -82,12 +86,17 @@ function War1P() {
     const suddenDeath = () => {
         let deck = [];
         let shuffledDeck = [];
+        let inPlay1;
+        let inPlay2;
         deck = suddenDeathDeck.cards.slice();
         shuffle(deck, shuffledDeck);
         shuffledDeck = shuffledDeck.flat();
-        setPlayerInPlay(shuffledDeck.shift());
-        setComputerInPlay(shuffledDeck.shift());
-        suddenDeathChecker()
+        console.log(shuffledDeck)
+        inPlay1 = shuffledDeck.shift()
+        inPlay2 = shuffledDeck.shift()
+        setPlayerInPlay(inPlay1);
+        setComputerInPlay(inPlay2);
+        suddenDeathChecker(inPlay1, inPlay2)
     }
 
     const inPlayChecker = (card1, card2) => {
@@ -118,7 +127,7 @@ function War1P() {
     }
 
     const deckCheck = (deck1, deck2, gOBool) => {
-     // DECK CHECK. 
+    // DECK CHECK. 
     // it checks before cards are drawn to see if there are 0 cards in the deck
     // if there are 0 cards it checks the discard pickle
     // if there are cards in the discard pcikle it, put them in a shallow copy, shuffle that copy, flatten that shuffle, then put that shit
@@ -251,10 +260,38 @@ function War1P() {
         setTurnAlert(false);
     }
 
+    useEffect(() => {
+        
+        // exit early when we reach 0
+        if (!timeLeft){
+            setGameOver(true);
+            return;  
+        } 
 
+        // save intervalId to clear the interval when the
+        // component re-renders
+        const intervalId = setInterval(() => {
+            if(!pause){
+                setTimeLeft(timeLeft - 1);
+            }
+        }, 1000);
+
+        // clear interval on re-render to avoid memory leaks
+        return () => clearInterval(intervalId);
+        // add timeLeft as a dependency to re-rerun the effect
+        // when we update it
+        }, [timeLeft, pause]);
+
+        const handlePause = (e) => {
+            e.preventDefault();
+            setPause(!pause)
+        }
 
     return(
         <>
+            <div>
+                <span>Time Remaining: {timeLeft}</span>
+            </div>
             <div>
                 <p>OPPONENT PLAY AREA</p>
                 <div>OPPONENT PROFILE</div>
@@ -282,7 +319,15 @@ function War1P() {
                             <p>
                                 Opponent Card: {`${computerInPlay[computerInPlay.length - 1].number}`} of {`${computerInPlay[computerInPlay.length - 1].suit}`}
                             </p>
-                            <button className="mainButton" onClick={endTurn}>CONTINUE</button>
+                            {!pause ? (
+                                <div>
+                                    <button className="mainButton" onClick={endTurn}>CONTINUE</button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <button className="mainButtonDisabled" disabled>DISABLED</button>
+                                </div>
+                            )}
                         </div>
                     ) : null}
                     {tieAlert ? (
@@ -320,10 +365,20 @@ function War1P() {
                             <p>
                                 Opponent Card: {`${computerInPlay[(computerInPlay.length - 1)].number}`} of {`${computerInPlay[(computerInPlay.length - 1)].suit}`}
                             </p>
-                            <button className="mainButton" onClick={(e) => {
-                                setTieAlert(false);
-                                tieBreak(e);
-                                }}>TIEBREAK!</button>
+                            {!pause ? (
+                                <div>
+                                    <button className="mainButton" onClick={(e) => {
+                                        setTieAlert(false);
+                                        tieBreak(e);
+                                        }}>
+                                        TIEBREAK!
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <button className="mainButtonDisabled" disabled>DISABLED</button>
+                                </div>
+                            )}
                         </div>
                     ) : null}
                     { gameOver ? (
@@ -362,7 +417,7 @@ function War1P() {
                         </div>
                     ) : null }
                 </div>
-                {(!turnAlert && !tieAlert && !gameOver) ? (
+                {(!turnAlert && !tieAlert && !gameOver && !pause) ? (
                     <div>
                         <button onClick={(e) => {
                             advanceTurn(e)
@@ -380,6 +435,9 @@ function War1P() {
                 <div>PLAYER DISCARD PILE: {`${playerDiscard.length}`} CARDS</div>
                 <div>PLAYER PROFILE</div>
                 <p>PLAYER PLAY AREA</p>
+            </div>
+            <div>
+                <button onClick={handlePause} className="mainButton">PAUSE</button>
             </div>
         </>
     )

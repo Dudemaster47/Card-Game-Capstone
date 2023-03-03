@@ -21,21 +21,6 @@ function GameTable() {
                 ) : null }
 
             </div>
-            <div>
-                <ul>
-                    <li>
-                        <button>Pause Game</button>
-                        <p>(disabled in certain contexts)</p>
-                    </li>
-                    <li>
-                        <button>Suspend Game</button>
-                        <p>(disabled in certain contexts)</p>
-                    </li>
-                    <li>
-                        <button>Forfeit Game</button>
-                    </li>
-                </ul>
-            </div>
         </>
     )
 }

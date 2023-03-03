@@ -26,6 +26,7 @@ function War1P() {
     const [tieCounter, setTieCounter] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [pause, setPause] = useState(false);
+    const [forfeit, setForfeit] = useState(false);
     let winCheck = false;
     let loseCheck = false;
 
@@ -56,7 +57,7 @@ function War1P() {
         } else {
             deck = sessionUser.decks.filter((el) => el.id === userAndDeck[1]) 
         }
-        deckCards = deck.cards.slice();
+        deckCards = global.structuredClone(deck.cards);
         shuffle(deckCards, shuffledDeck);
         shuffledDeck = shuffledDeck.flat();
         deckHalf1 = shuffledDeck.slice(0, 26);
@@ -66,8 +67,8 @@ function War1P() {
     }, []);
 
     const suddenDeathChecker = (card1, card2) => {
-        let playerDiscardCopy = playerDiscard.slice();
-        let computerDiscardCopy = computerDiscard.slice();
+        let playerDiscardCopy = global.structuredClone(playerDiscard);
+        let computerDiscardCopy = global.structuredClone(computerDiscard);
         if(card1.value > card2.value) {
             playerDiscardCopy = playerDiscardCopy.concat(card1);
             playerDiscardCopy = playerDiscardCopy.concat(card2);
@@ -88,10 +89,9 @@ function War1P() {
         let shuffledDeck = [];
         let inPlay1;
         let inPlay2;
-        deck = suddenDeathDeck.cards.slice();
+        deck = global.structuredClone(suddenDeathDeck.cards);
         shuffle(deck, shuffledDeck);
         shuffledDeck = shuffledDeck.flat();
-        console.log(shuffledDeck)
         inPlay1 = shuffledDeck.shift()
         inPlay2 = shuffledDeck.shift()
         setPlayerInPlay(inPlay1);
@@ -137,9 +137,9 @@ function War1P() {
     // OHH BABY THAT MEANS THE GAME
     // IS OVARRRRR
         if (deck1.length === 0 && playerDiscard.length !== 0){
-            let shallowCopy = playerDiscard.slice();
+            let deepCopy = global.structuredClone(playerDiscard);
             let shuffledDeck = [];
-            shuffle(shallowCopy, shuffledDeck);
+            shuffle(deepCopy, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
             setPlayerDeck(shuffledDeck);
             setPlayerDiscard([])
@@ -150,9 +150,9 @@ function War1P() {
             gOBool = true;
         }
         if (deck2.length === 0 && computerDiscard.length !== 0){
-            let shallowCopy = computerDiscard.slice();
+            let deepCopy = global.structuredClone(computerDiscard);
             let shuffledDeck = [];
-            shuffle(shallowCopy, shuffledDeck);
+            shuffle(deepCopy, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
             setComputerDeck(shuffledDeck);
             setComputerDiscard([])
@@ -167,8 +167,8 @@ function War1P() {
 
     const discard = () => {
         // this just handles where cards go after a winner of a turn is decided
-        let playerDiscardCopy = playerDiscard.slice();
-        let computerDiscardCopy = computerDiscard.slice();
+        let playerDiscardCopy = global.structuredClone(playerDiscard);
+        let computerDiscardCopy = global.structuredClone(computerDiscard);
         if(playerInPlay[playerInPlay.length - 1].value > computerInPlay[computerInPlay.length - 1].value) {
             playerDiscardCopy = playerDiscardCopy.concat(playerInPlay);
             playerDiscardCopy = playerDiscardCopy.concat(computerInPlay);
@@ -193,25 +193,29 @@ function War1P() {
         //that means more state tho...
         let tieUpdate = tieCounter + 1
         setTieCounter(tieUpdate);
-        let shallowDeck1 = playerDeck.slice();
-        let shallowDeck2 = computerDeck.slice();
-        let inPlay1 = playerInPlay.slice();
-        let inPlay2 = computerInPlay.slice();
+        let deepDeck1 = global.structuredClone(playerDeck);
+        let deepDeck2 = global.structuredClone(computerDeck);
+        let inPlay1 = global.structuredClone(playerInPlay);
+        let inPlay2 = global.structuredClone(computerInPlay);
         let gOBool = false
         for(let i = 0; i < 3; i++){
-            deckCheck(shallowDeck1, shallowDeck2, gOBool);
-            if(!deckCheck(shallowDeck1, shallowDeck2, gOBool)[2]){
-                shallowDeck1 = deckCheck(shallowDeck1, shallowDeck2)[0]
-                shallowDeck2 = deckCheck(shallowDeck1, shallowDeck2)[1]
-                inPlay1.push(shallowDeck1.shift());
-                inPlay2.push(shallowDeck2.shift());
+            deckCheck(deepDeck1, deepDeck2, gOBool);
+            if(!deckCheck(deepDeck1, deepDeck2, gOBool)[2]){
+                //the card disappearing glitch may be due to discard pile messiness
+                //deckcheck calls upon state to figure out what's hapening 
+                //state which does not update as this iterates....
+                //fix: more copies probably
+                deepDeck1 = deckCheck(deepDeck1, deepDeck2)[0]
+                deepDeck2 = deckCheck(deepDeck1, deepDeck2)[1]
+                inPlay1.push(deepDeck1.shift());
+                inPlay2.push(deepDeck2.shift());
             }
         }
-        if(!deckCheck(shallowDeck1, shallowDeck2, gOBool)[2]){
+        if(!deckCheck(deepDeck1, deepDeck2, gOBool)[2]){
             setPlayerInPlay(inPlay1);
             setComputerInPlay(inPlay2);
-            setPlayerDeck(shallowDeck1);
-            setComputerDeck(shallowDeck2);
+            setPlayerDeck(deepDeck1);
+            setComputerDeck(deepDeck2);
             inPlayChecker(inPlay1[(inPlay1.length - 1)], inPlay2[(inPlay2.length - 1)]);
         }
     }
@@ -227,29 +231,24 @@ function War1P() {
         if one is greater than the other, opens a div that says which one won
         if there's a tie, opens a div that announces a tie
         */
-       let shallowDeck1 = playerDeck.slice();
-       let shallowDeck2 = computerDeck.slice();
+       let deepDeck1 = global.structuredClone(playerDeck);
+       let deepDeck2 = global.structuredClone(computerDeck);
        let gOBool = false;
-       deckCheck(shallowDeck1, shallowDeck2, gOBool);
-       if(!deckCheck(shallowDeck1, shallowDeck2, gOBool)[2]){
-        shallowDeck1 = deckCheck(shallowDeck1, shallowDeck2)[0]
-        shallowDeck2 = deckCheck(shallowDeck1, shallowDeck2)[1]
+       deckCheck(deepDeck1, deepDeck2, gOBool);
+       if(!deckCheck(deepDeck1, deepDeck2, gOBool)[2]){
+        deepDeck1 = deckCheck(deepDeck1, deepDeck2)[0]
+        deepDeck2 = deckCheck(deepDeck1, deepDeck2)[1]
         let inPlay1 = []
         let inPlay2 = []
-            inPlay1.push(shallowDeck1.shift())
-            inPlay2.push(shallowDeck2.shift())
+            inPlay1.push(deepDeck1.shift())
+            inPlay2.push(deepDeck2.shift())
             setPlayerInPlay(inPlay1)
             setComputerInPlay(inPlay2);
-            setPlayerDeck(shallowDeck1);
-            setComputerDeck(shallowDeck2);
+            setPlayerDeck(deepDeck1);
+            setComputerDeck(deepDeck2);
             inPlayChecker(inPlay1[inPlay1.length - 1], inPlay2[inPlay2.length - 1])
         }
     }
-
-    // alright. problem. the setInPlay state methods do not update the in play state "fast" enough for me to. immediately turn
-    // around and use it for checks.
-    // even though the deck state methods do update fast enough. 
-
 
     const endTurn = (e) => {
         e.preventDefault();
@@ -261,13 +260,11 @@ function War1P() {
     }
 
     useEffect(() => {
-        
         // exit early when we reach 0
         if (!timeLeft){
             setGameOver(true);
             return;  
         } 
-
         // save intervalId to clear the interval when the
         // component re-renders
         const intervalId = setInterval(() => {
@@ -275,7 +272,6 @@ function War1P() {
                 setTimeLeft(timeLeft - 1);
             }
         }, 1000);
-
         // clear interval on re-render to avoid memory leaks
         return () => clearInterval(intervalId);
         // add timeLeft as a dependency to re-rerun the effect
@@ -287,6 +283,43 @@ function War1P() {
             setPause(!pause)
         }
 
+        const handleForfeit = (e) => {
+            e.preventDefault();
+            setForfeit(true);
+            setPlayerDeck([])
+        }
+
+        useEffect(() => {
+            const intlState = JSON.parse(localStorage.getItem('gameState'))
+            if((intlState[0] !== gameId) || intlState[11]) {
+            } else {
+                setTimeLeft(intlState[1]);
+                setPlayerDeck(intlState[2]);
+                setComputerDeck(intlState[3]);
+                setPlayerDiscard(intlState[4]);
+                setComputerDiscard(intlState[5]);
+                setPlayerInPlay(intlState[6]);
+                setComputerInPlay(intlState[7]);
+                setTurnAlert(intlState[8]);
+                setTieAlert(intlState[9]);
+                setTieCounter(intlState[10]);
+            }
+        }, [])
+
+        useEffect(() => {
+            const gameState = [gameId, timeLeft, playerDeck, computerDeck, playerDiscard, computerDiscard, playerInPlay, computerInPlay, turnAlert, tieAlert, tieCounter, gameOver];
+            localStorage.setItem('gameState', JSON.stringify(gameState))
+        }, [timeLeft, playerDeck, computerDeck, playerDiscard, computerDiscard, playerInPlay, computerInPlay, turnAlert, tieAlert, tieCounter, gameOver])
+
+        const suspendGame = ((e) => {
+            e.preventDefault();
+            if(gameOver){
+                endDaGame();
+            } else {
+                history.push('/')
+            }
+        })
+ 
     return(
         <>
             <div>
@@ -439,6 +472,49 @@ function War1P() {
             <div>
                 <button onClick={handlePause} className="mainButton">PAUSE</button>
             </div>
+            <div>
+                <button onClick={handleForfeit} className="mainButton">FORFEIT</button>
+            </div>
+            <div>
+                <button onClick={suspendGame} className="mainButton">SUSPEND GAME</button>
+            </div>
+
+            { forfeit && (
+                <>
+                <div className="darkBG" onClick={() => setForfeit(false)} />
+                <div className="centered">
+                    <div className="modal">
+                        <div className="modalHeader">
+                            <h5 className="modalHeading"> Are You Sure?</h5>
+                        </div>
+                        <button 
+                            onClick={() => setForfeit(false)}  
+                            className="closeBtn">
+                            X
+                        </button>
+                        <div className="modalActions">
+                        <div className="actionsContainer">
+							<button
+								onClick={() => {
+                                    setGameOver(true)
+                                    setForfeit(false)
+                                }}
+								className="submitBtn"
+							>
+								Forfeit
+							</button>
+							<button
+								onClick={() => setForfeit(false)}
+								className="cancelBtn"
+							>
+								Cancel
+							</button>
+						</div>
+                        </div>
+                    </div>    
+                </div> 
+                </>
+            )}
         </>
     )
 }

@@ -1,15 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 import "./navbar.css"
 
 const NavBar = () => {
+  const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
 
   const notYetImplemented = (e) => {
     e.preventDefault();
     window.alert("Not yet implemented!")
+  }
+
+  const resumeGame = (e) => {
+    e.preventDefault();
+    history.push(`/games/${sessionUser.createdGames[0].id}`)
   }
 
   return (
@@ -37,7 +43,7 @@ const NavBar = () => {
           </div>
         )}
         <li className="navHeader"><span>CARD GAME APP</span></li>
-        <li className="navTab" onClick={notYetImplemented}>
+        <li className="navTab" onClick={resumeGame}>
           <p>Resume Game In Progress</p>
         </li>
         { sessionUser ? (

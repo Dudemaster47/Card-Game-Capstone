@@ -126,7 +126,7 @@ function War1P() {
         history.push('/');
     }
 
-    const deckCheck = (deck1, deck2, gOBool) => {
+    const deckCheck = (deck1, deck2, discard1, discard2, gOBool) => {
     // DECK CHECK. 
     // it checks before cards are drawn to see if there are 0 cards in the deck
     // if there are 0 cards it checks the discard pickle
@@ -136,33 +136,37 @@ function War1P() {
     // BUT IF THE DISCARD PILE IS ZERO AND THE DECK IS ZRO.LENGTH
     // OHH BABY THAT MEANS THE GAME
     // IS OVARRRRR
-        if (deck1.length === 0 && playerDiscard.length !== 0){
-            let deepCopy = global.structuredClone(playerDiscard);
+        if (deck1.length === 0 && discard1.length !== 0){
             let shuffledDeck = [];
-            shuffle(deepCopy, shuffledDeck);
+            shuffle(discard1, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
             setPlayerDeck(shuffledDeck);
             setPlayerDiscard([])
             deck1 = shuffledDeck;
+            if(deck1.length > 0){
+                discard1 = [];
+            }
   
-        } else if (deck1.length === 0 && playerDiscard.length === 0){
+        } else if (deck1.length === 0 && discard1.length === 0){
             setGameOver(true);
             gOBool = true;
         }
-        if (deck2.length === 0 && computerDiscard.length !== 0){
-            let deepCopy = global.structuredClone(computerDiscard);
+        if (deck2.length === 0 && discard2 !== 0){
             let shuffledDeck = [];
-            shuffle(deepCopy, shuffledDeck);
+            shuffle(discard2, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
             setComputerDeck(shuffledDeck);
             setComputerDiscard([])
             deck2 = shuffledDeck;
+            if(deck2.length > 0){
+                discard2 = [];
+            }
             
-        } else if (deck2.length === 0 && computerDiscard.length === 0){
+        } else if (deck2.length === 0 && discard2 === 0){
             setGameOver(true);
             gOBool = true;
         }
-        return [deck1, deck2, gOBool];
+        return [deck1, deck2, discard1, discard2, gOBool];
     }
 
     const discard = () => {
@@ -195,23 +199,28 @@ function War1P() {
         setTieCounter(tieUpdate);
         let deepDeck1 = global.structuredClone(playerDeck);
         let deepDeck2 = global.structuredClone(computerDeck);
+        let deepDiscard1 = global.structuredClone(playerDiscard);
+        let deepDiscard2 = global.structuredClone(computerDiscard);
         let inPlay1 = global.structuredClone(playerInPlay);
         let inPlay2 = global.structuredClone(computerInPlay);
         let gOBool = false
+        let deckArr = deckCheck(deepDeck1, deepDeck2, deepDiscard1, deepDiscard2, gOBool)
         for(let i = 0; i < 3; i++){
-            deckCheck(deepDeck1, deepDeck2, gOBool);
-            if(!deckCheck(deepDeck1, deepDeck2, gOBool)[2]){
-                //the card disappearing glitch may be due to discard pile messiness
-                //deckcheck calls upon state to figure out what's hapening 
-                //state which does not update as this iterates....
-                //fix: more copies probably
-                deepDeck1 = deckCheck(deepDeck1, deepDeck2)[0]
-                deepDeck2 = deckCheck(deepDeck1, deepDeck2)[1]
+            // deckCheck(deepDeck1, deepDeck2, deepDiscard1, deepDiscard2, gOBool);
+            if(!deckArr[4]){
+                deepDeck1 = deckArr[0];
+                deepDeck2 = deckArr[1];
+                deepDiscard1 = deckArr[2];
+                deepDiscard2 = deckArr[3];
+                
+                console.log(deepDeck1, deepDeck2, "check the decks for what is hapening");
+                console.log(deepDiscard1, deepDiscard2, "check the discard piles for what is happening");
                 inPlay1.push(deepDeck1.shift());
                 inPlay2.push(deepDeck2.shift());
+                deckArr = deckCheck(deepDeck1, deepDeck2, deepDiscard1, deepDiscard2, gOBool)
             }
         }
-        if(!deckCheck(deepDeck1, deepDeck2, gOBool)[2]){
+        if(!deckArr[4]){
             setPlayerInPlay(inPlay1);
             setComputerInPlay(inPlay2);
             setPlayerDeck(deepDeck1);
@@ -233,11 +242,13 @@ function War1P() {
         */
        let deepDeck1 = global.structuredClone(playerDeck);
        let deepDeck2 = global.structuredClone(computerDeck);
+       let deepDiscard1 = global.structuredClone(playerDiscard);
+       let deepDiscard2 = global.structuredClone(computerDiscard);
        let gOBool = false;
-       deckCheck(deepDeck1, deepDeck2, gOBool);
-       if(!deckCheck(deepDeck1, deepDeck2, gOBool)[2]){
-        deepDeck1 = deckCheck(deepDeck1, deepDeck2)[0]
-        deepDeck2 = deckCheck(deepDeck1, deepDeck2)[1]
+       let deckArr = deckCheck(deepDeck1, deepDeck2, deepDiscard1, deepDiscard2, gOBool)
+       if(!deckArr[4]){
+        deepDeck1 = deckArr[0]
+        deepDeck2 = deckArr[1]
         let inPlay1 = []
         let inPlay2 = []
             inPlay1.push(deepDeck1.shift())
@@ -287,6 +298,7 @@ function War1P() {
             e.preventDefault();
             setForfeit(true);
             setPlayerDeck([])
+            setComputerDeck(["dummy"])
         }
 
         useEffect(() => {
@@ -330,7 +342,7 @@ function War1P() {
                 <div>OPPONENT PROFILE</div>
                 <div>OPPONENT DISCARD PILE: {`${computerDiscard.length}`} CARDS</div>
                 <div>OPPONENT DECK: {`${computerDeck.length}`} CARDS</div>
-                <div>OPPONENT IN PLAY</div>
+                <div>OPPONENT IN PLAY: {`${computerInPlay.length}`} CARDS</div>
             </div>
             <div>
                 <div>
@@ -463,7 +475,7 @@ function War1P() {
                 )}
             </div>
             <div>
-                <div>PLAYER IN PLAY</div>
+                <div>PLAYER IN PLAY: {`${playerInPlay.length}`} CARDS</div>
                 <div>PLAYER DECK: {`${playerDeck.length}`} CARDS</div>
                 <div>PLAYER DISCARD PILE: {`${playerDiscard.length}`} CARDS</div>
                 <div>PLAYER PROFILE</div>

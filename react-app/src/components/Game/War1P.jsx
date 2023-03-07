@@ -27,6 +27,7 @@ function War1P() {
     const [gameOver, setGameOver] = useState(false);
     const [pause, setPause] = useState(false);
     const [forfeit, setForfeit] = useState(false);
+    const [playerDeckInfo, setPlayerDeckInfo] = useState([]);
     let winCheck = false;
     let loseCheck = false;
 
@@ -47,23 +48,24 @@ function War1P() {
     // putting one half into the player's possession and the other into the computer's.
     useEffect(() => {
         const userAndDeck = JSON.parse(localStorage.getItem('userAndDeck'))
-        let deck;
+        let deck = [];
         let deckCards = [];
         let shuffledDeck = [];
         let deckHalf1 = [];
         let deckHalf2 = [];
         if(userAndDeck[1] === 0){
-            deck = sessionUser.defaultDeck;
+            deck.push(sessionUser.defaultDeck);
         } else {
             deck = sessionUser.decks.filter((el) => el.id === userAndDeck[1]) 
         }
-        deckCards = global.structuredClone(deck.cards);
+        deckCards = global.structuredClone(deck[0].cards);
         shuffle(deckCards, shuffledDeck);
         shuffledDeck = shuffledDeck.flat();
         deckHalf1 = shuffledDeck.slice(0, 26);
         deckHalf2 = shuffledDeck.slice(26);
         setPlayerDeck(deckHalf1);
         setComputerDeck(deckHalf2);
+        setPlayerDeckInfo(deck);
     }, []);
 
     const suddenDeathChecker = (card1, card2) => {
@@ -212,9 +214,6 @@ function War1P() {
                 deepDeck2 = deckArr[1];
                 deepDiscard1 = deckArr[2];
                 deepDiscard2 = deckArr[3];
-                
-                console.log(deepDeck1, deepDeck2, "check the decks for what is hapening");
-                console.log(deepDiscard1, deepDiscard2, "check the discard piles for what is happening");
                 inPlay1.push(deepDeck1.shift());
                 inPlay2.push(deepDeck2.shift());
                 deckArr = deckCheck(deepDeck1, deepDeck2, deepDiscard1, deepDiscard2, gOBool)
@@ -240,6 +239,8 @@ function War1P() {
         if one is greater than the other, opens a div that says which one won
         if there's a tie, opens a div that announces a tie
         */
+       console.log(playerDeck)
+       console.log(computerDeck, "WHAT IS FUCKING HAPPENING????")
        let deepDeck1 = global.structuredClone(playerDeck);
        let deepDeck2 = global.structuredClone(computerDeck);
        let deepDiscard1 = global.structuredClone(playerDiscard);
@@ -340,9 +341,20 @@ function War1P() {
             <div>
                 <p>OPPONENT PLAY AREA</p>
                 <div>OPPONENT PROFILE</div>
-                <div>OPPONENT DISCARD PILE: {`${computerDiscard.length}`} CARDS</div>
-                <div>OPPONENT DECK: {`${computerDeck.length}`} CARDS</div>
-                <div>OPPONENT IN PLAY: {`${computerInPlay.length}`} CARDS</div>
+                <div>OPPONENT DISCARD PILE: {computerDiscard && computerDiscard.length > 0 ? (
+                    <div>
+                        <img src={computerDiscard[0].cardArt} />({`${computerDiscard.length}`})
+                    </div>
+                ) : null}
+                </div>
+                <div>OPPONENT DECK:  {suddenDeathDeck ? (
+                    <div><img src={suddenDeathDeck.cardArt}/>({`${computerDeck.length}`})</div>
+                ) : null}
+                </div>
+                <div>OPPONENT IN PLAY: {computerInPlay && computerInPlay.length > 0 ? (
+                    <div><img src={computerInPlay[computerInPlay.length - 1].cardArt} />({`${computerInPlay.length}`})</div>
+                ) : null}
+                </div>
             </div>
             <div>
                 <div>
@@ -359,10 +371,10 @@ function War1P() {
                                 </p>
                             )}
                             <p>
-                                Player Card: {`${playerInPlay[playerInPlay.length - 1].number}`} of {`${playerInPlay[playerInPlay.length - 1].suit}`}
+                                Opponent Card: {`${computerInPlay[computerInPlay.length - 1].number}`} of {`${computerInPlay[computerInPlay.length - 1].suit}`}
                             </p>
                             <p>
-                                Opponent Card: {`${computerInPlay[computerInPlay.length - 1].number}`} of {`${computerInPlay[computerInPlay.length - 1].suit}`}
+                                Player Card: {`${playerInPlay[playerInPlay.length - 1].number}`} of {`${playerInPlay[playerInPlay.length - 1].suit}`}
                             </p>
                             {!pause ? (
                                 <div>
@@ -405,10 +417,10 @@ function War1P() {
                                 </p>
                             ) : null}
                             <p>
-                                Player Card: {`${playerInPlay[(playerInPlay.length - 1)].number}`} of {`${playerInPlay[(playerInPlay.length - 1)].suit}`}
+                                Opponent Card: {`${computerInPlay[(computerInPlay.length - 1)].number}`} of {`${computerInPlay[(computerInPlay.length - 1)].suit}`}
                             </p>
                             <p>
-                                Opponent Card: {`${computerInPlay[(computerInPlay.length - 1)].number}`} of {`${computerInPlay[(computerInPlay.length - 1)].suit}`}
+                                Player Card: {`${playerInPlay[(playerInPlay.length - 1)].number}`} of {`${playerInPlay[(playerInPlay.length - 1)].suit}`}
                             </p>
                             {!pause ? (
                                 <div>
@@ -475,9 +487,18 @@ function War1P() {
                 )}
             </div>
             <div>
-                <div>PLAYER IN PLAY: {`${playerInPlay.length}`} CARDS</div>
-                <div>PLAYER DECK: {`${playerDeck.length}`} CARDS</div>
-                <div>PLAYER DISCARD PILE: {`${playerDiscard.length}`} CARDS</div>
+                <div>PLAYER IN PLAY: {playerInPlay && playerInPlay.length > 0 ? (
+                    <div>   <img src={playerInPlay[playerInPlay.length - 1].cardArt}/>({`${playerInPlay.length}`})</div>
+                ) : null} 
+                </div>
+                <div>PLAYER DECK: {playerDeckInfo[0] ? (
+                    <div><img src={playerDeckInfo[0].cardArt}/>({`${playerDeck.length}`})</div>
+                ) : null}
+                    </div>
+                <div>PLAYER DISCARD PILE: {playerDiscard && playerDiscard.length > 0 ? (
+                    <div><img src={playerDiscard[0].cardArt} />({`${playerDiscard.length}`})</div>
+                ) : null}
+                </div>
                 <div>PLAYER PROFILE</div>
                 <p>PLAYER PLAY AREA</p>
             </div>

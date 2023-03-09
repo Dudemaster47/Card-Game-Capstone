@@ -239,8 +239,6 @@ function War1P() {
         if one is greater than the other, opens a div that says which one won
         if there's a tie, opens a div that announces a tie
         */
-       console.log(playerDeck)
-       console.log(computerDeck, "WHAT IS FUCKING HAPPENING????")
        let deepDeck1 = global.structuredClone(playerDeck);
        let deepDeck2 = global.structuredClone(computerDeck);
        let deepDiscard1 = global.structuredClone(playerDiscard);

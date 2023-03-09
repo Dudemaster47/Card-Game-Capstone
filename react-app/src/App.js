@@ -10,6 +10,7 @@ import User from './components/User';
 import Home from './components/Home/Home';
 import PageNotFound from './components/PageNotFound';
 import GameTable from './components/Game/GameTable';
+import Help from './components/Help/Help';
 import { authenticate } from './store/session';
 import { getAllUsersThunk } from './store/users'
 import { getDefaultDeckThunk } from './store/defaultDeck'
@@ -47,6 +48,9 @@ function App() {
         </Route>
         <Route path='/sign-up' exact={true}>
           <SignUpForm />
+        </Route>
+        <Route path='/help' exact={true}>
+          <Help />
         </Route>
         <ProtectedRoute path='/users' exact={true} >
           <UsersList/>

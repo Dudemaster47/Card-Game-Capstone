@@ -2,8 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { createGameThunk } from "../../store/games";
 import { useEffect, useState } from "react";
 import { refreshSessionuser } from "../../store/session";
+import { useHistory } from "react-router-dom";
 
 function LoggedIn() {
+    const history = useHistory();
     const sessionUser = useSelector((state) => state.session.user);
     const dispatch = useDispatch();
     const [gameExists, setGameExists] = useState(sessionUser.createdGames.length > 0)
@@ -29,6 +31,8 @@ function LoggedIn() {
     const handleClick = (e) => {
 		e.preventDefault();
         if (!gameExists){   
+            const gameState = ["", "", "", "", "", "", "", "", "", "", "", ""]
+            localStorage.setItem('gameState', JSON.stringify([gameState]))
             return dispatch(createGameThunk(gameCreator));
         } else {
             window.alert("Can't have more than one active game at a time!")
@@ -39,6 +43,11 @@ function LoggedIn() {
         e.preventDefault();
         window.alert("Not yet implemented!")
     }
+    
+    const help = (e) => {
+        e.preventDefault();
+        history.push('/help')
+    }
 
     return (
         <>
@@ -46,7 +55,7 @@ function LoggedIn() {
                 handleClick(e)
                 setGameExists(true)}} className="mainButton">CREATE A GAME</button>
             <button onClick={notYetImplemented} className="mainButton">JOIN A GAME</button>
-            <button onClick={notYetImplemented} className="mainButton">RESUME GAME</button>
+            <button onClick={help} className="mainButton">HELP</button>
         </>
     )
 }

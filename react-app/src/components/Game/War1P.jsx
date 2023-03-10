@@ -5,6 +5,7 @@ import { deleteGameThunk } from "../../store/games";
 import { editUserThunk } from "../../store/users";
 import { refreshSessionuser } from "../../store/session";
 import { getAllUsersThunk } from "../../store/users";
+import computer_profile_pic from "../../assets/computer_profile_pic.png"
 
 function War1P() {
     const history = useHistory()
@@ -333,29 +334,36 @@ function War1P() {
  
     return(
         <>
-            <div>
-                <span>Time Remaining: {timeLeft}</span>
+            <div className="timerContainer">
+                <span className="timer">Time Remaining: {timeLeft}</span>
             </div>
-            <div>
+            <div className="opponentPlayArea">
                 <p>OPPONENT PLAY AREA</p>
-                <div>OPPONENT PROFILE</div>
-                <div>OPPONENT DISCARD PILE: {computerDiscard && computerDiscard.length > 0 ? (
-                    <div>
-                        <img src={computerDiscard[0].cardArt} />({`${computerDiscard.length}`})
+                <div className="profileArea">
+                    <div className="profileImgBox">
+                        <img src={computer_profile_pic} className="profilePic"/>
+                    </div>
+                    <div className="profileNameBox">
+                        <p>COMPUTER</p>
+                    </div>
+                </div>
+                <div className="opponentDiscardPileArea">OPPONENT DISCARD PILE: {computerDiscard && computerDiscard.length > 0 ? (
+                    <div className="discardPile">
+                        <img className="cardImg" src={computerDiscard[0].cardArt} />({`${computerDiscard.length}`})
                     </div>
                 ) : null}
                 </div>
-                <div>OPPONENT DECK:  {suddenDeathDeck ? (
-                    <div><img src={suddenDeathDeck.cardArt}/>({`${computerDeck.length}`})</div>
+                <div className="opponentDeckArea">OPPONENT DECK:  {suddenDeathDeck ? (
+                    <div className="deck"><img className="cardImg" src={suddenDeathDeck.cardArt}/>({`${computerDeck.length}`})</div>
                 ) : null}
                 </div>
-                <div>OPPONENT IN PLAY: {computerInPlay && computerInPlay.length > 0 ? (
-                    <div><img src={computerInPlay[computerInPlay.length - 1].cardArt} />({`${computerInPlay.length}`})</div>
+                <div className="opponentInPlayArea">OPPONENT IN PLAY: {computerInPlay && computerInPlay.length > 0 ? (
+                    <div className="inPlay"><img className="cardImg" src={computerInPlay[computerInPlay.length - 1].cardArt} />({`${computerInPlay.length}`})</div>
                 ) : null}
                 </div>
             </div>
-            <div>
-                <div>
+            <div className="centerField">
+                <div className="announcementsBox">
                     <p>ANNOUNCEMENTS</p>
                     {turnAlert ? (
                         <div>
@@ -484,30 +492,39 @@ function War1P() {
                     </div>
                 )}
             </div>
-            <div>
-                <div>PLAYER IN PLAY: {playerInPlay && playerInPlay.length > 0 ? (
-                    <div>   <img src={playerInPlay[playerInPlay.length - 1].cardArt}/>({`${playerInPlay.length}`})</div>
+            <div className="playerPlayArea">
+                <div className="playerInPlayArea">PLAYER IN PLAY: {playerInPlay && playerInPlay.length > 0 ? (
+                    <div className="inPlay"><img className="cardImg" src={playerInPlay[playerInPlay.length - 1].cardArt}/>({`${playerInPlay.length}`})</div>
                 ) : null} 
                 </div>
-                <div>PLAYER DECK: {playerDeckInfo[0] ? (
-                    <div><img src={playerDeckInfo[0].cardArt}/>({`${playerDeck.length}`})</div>
+                <div className="playerDeckArea">PLAYER DECK: {playerDeckInfo[0] ? (
+                    <div className="deck"><img className="cardImg" src={playerDeckInfo[0].cardArt}/>({`${playerDeck.length}`})</div>
                 ) : null}
                     </div>
-                <div>PLAYER DISCARD PILE: {playerDiscard && playerDiscard.length > 0 ? (
-                    <div><img src={playerDiscard[0].cardArt} />({`${playerDiscard.length}`})</div>
+                <div className="playerDiscardPileArea">PLAYER DISCARD PILE: {playerDiscard && playerDiscard.length > 0 ? (
+                    <div className="discardPile"><img className="cardImg" src={playerDiscard[0].cardArt} />({`${playerDiscard.length}`})</div>
                 ) : null}
                 </div>
-                <div>PLAYER PROFILE</div>
+                <div className="profileArea">
+                    <div className="profileImgBox">
+                        <img src={sessionUser.profileImg} />
+                    </div>
+                    <div className="profileNameBox">
+                        <p>{sessionUser.username}</p>
+                    </div>
+                </div>
                 <p>PLAYER PLAY AREA</p>
             </div>
-            <div>
-                <button onClick={handlePause} className="mainButton">PAUSE</button>
-            </div>
-            <div>
-                <button onClick={handleForfeit} className="mainButton">FORFEIT</button>
-            </div>
-            <div>
-                <button onClick={suspendGame} className="mainButton">SUSPEND GAME</button>
+            <div className="optionMenu">
+                <div className="option">
+                    <button onClick={handlePause} className="mainButton">PAUSE</button>
+                </div>
+                <div className="option">
+                    <button onClick={handleForfeit} className="mainButton">FORFEIT</button>
+                </div>
+                <div className="option">
+                    <button onClick={suspendGame} className="mainButton">SUSPEND GAME</button>
+                </div>
             </div>
 
             { forfeit && (

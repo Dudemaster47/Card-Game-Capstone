@@ -1,7 +1,7 @@
 from app.models import db, Game, environment, SCHEMA
 
 def seed_games():
-    test = Game(timer=300, game_type="War", user_id=2)
+    test = Game(timer=300, game_type="War", user_id=1)
 
     db.session.add(test)
     db.session.commit()

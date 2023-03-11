@@ -87,7 +87,7 @@ function EditDeckModal({setIsOpen, deck, sendDataToDecks}) {
 							</button>
 							<button
 								onClick={() => setIsOpen(false)}
-								className="cancel"
+								className="cancelBtn"
 							>
 								Cancel
 							</button>

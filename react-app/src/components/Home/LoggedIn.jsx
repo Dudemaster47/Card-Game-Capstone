@@ -51,11 +51,17 @@ function LoggedIn() {
 
     return (
         <>
-            <button onClick={(e) => {
-                handleClick(e)
-                setGameExists(true)}} className="mainButton">CREATE A GAME</button>
-            <button onClick={notYetImplemented} className="mainButton">JOIN A GAME</button>
-            <button onClick={help} className="mainButton">HELP</button>
+            <div className="homeOption">
+                <button onClick={(e) => {
+                    handleClick(e)
+                    setGameExists(true)}} className="mainButton">CREATE A GAME</button>
+            </div>
+            <div className="homeOption">
+                <button onClick={notYetImplemented} className="mainButton">JOIN A GAME</button>
+            </div>
+            <div className="homeOption">
+                <button onClick={help} className="mainButton">HELP</button>
+            </div>
         </>
     )
 }

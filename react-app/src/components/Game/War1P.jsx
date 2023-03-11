@@ -6,6 +6,7 @@ import { editUserThunk } from "../../store/users";
 import { refreshSessionuser } from "../../store/session";
 import { getAllUsersThunk } from "../../store/users";
 import computer_profile_pic from "../../assets/computer_profile_pic.png"
+import placeholder_pic from "../../assets/placeholder_card_empty.png"
 
 function War1P() {
     const history = useHistory()
@@ -31,7 +32,6 @@ function War1P() {
     const [playerDeckInfo, setPlayerDeckInfo] = useState([]);
     let winCheck = false;
     let loseCheck = false;
-
     // note to self: ask for help un-spaghetti-ing this
     // namely: deck check doesn't work due to how state functions and i'm having trouble figuring out how to work around that issue when it comes
     // to reshuffling decks
@@ -334,235 +334,315 @@ function War1P() {
  
     return(
         <>
-            <div className="timerContainer">
-                <span className="timer">Time Remaining: {timeLeft}</span>
-            </div>
-            <div className="opponentPlayArea">
-                <p>OPPONENT PLAY AREA</p>
-                <div className="profileArea">
-                    <div className="profileImgBox">
-                        <img src={computer_profile_pic} className="profilePic"/>
+            <div className="tableContainer">    
+                <div className="opponentPlayArea">
+                    <div className="infoSpace">
+                    <div className="profileArea">
+                        <div className="profileNameBox">
+                            <p>Computer</p>
+                        </div>
+                        <div className="profileImgBox">
+                            <img src={computer_profile_pic} className="profilePic"/>
+                        </div>
                     </div>
-                    <div className="profileNameBox">
-                        <p>COMPUTER</p>
+                    <div className="gameTitle">
+                        <h1>{games && thisGame && (thisGame.gameType)}</h1>
                     </div>
-                </div>
-                <div className="opponentDiscardPileArea">OPPONENT DISCARD PILE: {computerDiscard && computerDiscard.length > 0 ? (
-                    <div className="discardPile">
-                        <img className="cardImg" src={computerDiscard[0].cardArt} />({`${computerDiscard.length}`})
+                    <div className="timerContainer">
+                        <span className="timer">Time Remaining: {timeLeft}</span>
                     </div>
-                ) : null}
-                </div>
-                <div className="opponentDeckArea">OPPONENT DECK:  {suddenDeathDeck ? (
-                    <div className="deck"><img className="cardImg" src={suddenDeathDeck.cardArt}/>({`${computerDeck.length}`})</div>
-                ) : null}
-                </div>
-                <div className="opponentInPlayArea">OPPONENT IN PLAY: {computerInPlay && computerInPlay.length > 0 ? (
-                    <div className="inPlay"><img className="cardImg" src={computerInPlay[computerInPlay.length - 1].cardArt} />({`${computerInPlay.length}`})</div>
-                ) : null}
-                </div>
-            </div>
-            <div className="centerField">
-                <div className="announcementsBox">
-                    <p>ANNOUNCEMENTS</p>
-                    {turnAlert ? (
-                        <div>
-                            {playerInPlay[0].value > computerInPlay[0].value ? (
-                                <p>
-                                    Player wins!
-                                </p>
-                            ) : (
-                                <p>
-                                    Computer Wins!
-                                </p>
-                            )}
-                            <p>
-                                Opponent Card: {`${computerInPlay[computerInPlay.length - 1].number}`} of {`${computerInPlay[computerInPlay.length - 1].suit}`}
-                            </p>
-                            <p>
-                                Player Card: {`${playerInPlay[playerInPlay.length - 1].number}`} of {`${playerInPlay[playerInPlay.length - 1].suit}`}
-                            </p>
-                            {!pause ? (
-                                <div>
-                                    <button className="mainButton" onClick={endTurn}>CONTINUE</button>
+                    </div>
+                    <div className="cardSpace">
+
+                        <div className="opponentDiscardPileArea">{computerDiscard && computerDiscard.length > 0 ? (
+                            <div className="discardPile">
+                                <p>DISCARD PILE</p>
+                                <span>({`${computerDiscard.length}`})</span>
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={computerDiscard[0].cardArt} />
                                 </div>
-                            ) : (
-                                <div>
-                                    <button className="mainButtonDisabled" disabled>DISABLED</button>
+                            </div>
+                        ) : (
+                            <div className="discardPile">
+                                <p>DISCARD PILE</p>
+                                <span>(0)</span>
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={placeholder_pic} />
                                 </div>
+                            </div>
+                        )}
+                        </div>
+                        <div className="opponentInPlayArea">{computerInPlay && computerInPlay.length > 0 ? (
+                            <div className="inPlay">
+                                <p>IN PLAY</p>
+                                <span>({`${computerInPlay.length}`})</span>
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={computerInPlay[computerInPlay.length - 1].cardArt} />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="inPlay">
+                                <p>IN PLAY</p>
+                                <span>(0)</span>
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={placeholder_pic} />
+                                </div>
+                            </div>
                             )}
                         </div>
-                    ) : null}
-                    {tieAlert ? (
-                        <div>
-                            <p>
-                                It's a tie!
-                            </p>
-                            <p>
-                                Ties in a row: {`${tieCounter}`}
-                            </p>
-                            {tieCounter === 2 ? (
-                                <p>
-                                    This is unlikely.
-                                </p>
-                            ) : tieCounter === 3 ? (
-                                <p>
-                                    This is exceptionally unlikely.
-                                </p>
-                            ) : tieCounter === 4 ? (
-                                <p>
-                                    Really?!
-                                </p>
-                            ) : tieCounter === 5 ? (
-                                <p>
-                                    How are you doing this?
-                                </p>
-                            ) : tieCounter > 5 ? (
-                                <p>
-                                    Congratulations, you're the only person seeing this probably ever.
-                                </p>
-                            ) : null}
-                            <p>
-                                Opponent Card: {`${computerInPlay[(computerInPlay.length - 1)].number}`} of {`${computerInPlay[(computerInPlay.length - 1)].suit}`}
-                            </p>
-                            <p>
-                                Player Card: {`${playerInPlay[(playerInPlay.length - 1)].number}`} of {`${playerInPlay[(playerInPlay.length - 1)].suit}`}
-                            </p>
-                            {!pause ? (
-                                <div>
-                                    <button className="mainButton" onClick={(e) => {
-                                        setTieAlert(false);
-                                        tieBreak(e);
-                                        }}>
-                                        TIEBREAK!
+                        <div className="opponentDeckArea">  {suddenDeathDeck ? (
+                            <div className="deck">
+                                <p>DECK</p>
+                                <span>({`${computerDeck.length}`})</span>
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={suddenDeathDeck.cardArt}/>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="deck">
+                                <p>DECK</p>
+                                <span>(0)</span>
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={placeholder_pic} />
+                                </div>
+                            </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className="playerPlayArea">
+                    <div className="cardSpace">
+
+                        <div className="playerDeckArea"> {playerDeckInfo[0] ? (
+                            <div className="deck">
+                                <div className="cardPictureBox">     
+                                    <img className="cardImg" src={playerDeckInfo[0].cardArt}/>
+                                </div>
+                                <span>({`${playerDeck.length}`})</span>
+                                <p>DECK</p>
+                            </div>
+                        ) : (
+                            <div className="deck">
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={placeholder_pic} />
+                                </div>
+                                <span>(0)</span>
+                                <p>DECK</p>
+                            </div>
+                            )}
+                        </div>
+                        <div className="playerInPlayArea">{playerInPlay && playerInPlay.length > 0 ? (
+                            <div className="inPlay">
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={playerInPlay[playerInPlay.length - 1].cardArt}/>
+                                </div>
+                                <span>({`${playerInPlay.length}`})</span>
+                                <p>IN PLAY</p>
+                            </div>
+                        ) : (
+                            <div className="inPlay">
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={placeholder_pic} />
+                                </div>
+                                <span>(0)</span>
+                                <p>IN PLAY</p>
+                            </div>
+                            )} 
+                        </div>
+                        <div className="playerDiscardPileArea">{playerDiscard && playerDiscard.length > 0 ? (
+                            <div className="discardPile">
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={playerDiscard[0].cardArt} />
+                                </div>
+                                <span>({`${playerDiscard.length}`})</span>
+                                <p>DISCARD PILE</p>
+                            </div>
+                        ) : (
+                            <div className="discardPile">
+                                <div className="cardPictureBox">
+                                    <img className="cardImg" src={placeholder_pic} />
+                                </div>
+                                <span>(0)</span>
+                                <p>DISCARD PILE</p>
+                            </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="infoSpace">
+                        <div className="profileArea">
+                            <div className="profileImgBox">
+                                <img className="profilePic" src={sessionUser.profileImg} />
+                            </div>
+                            <div className="profileNameBox">
+                                <p>{sessionUser.username}</p>
+                            </div>
+                        </div>
+                        <div className="announcementsBox">
+                            <p className="announcementsTitle">ANNOUNCEMENTS</p>
+                            <div className="turnAnnouncements">
+                                {turnAlert && !gameOver ? (
+                                    <div>
+                                        {playerInPlay[0].value > computerInPlay[0].value ? (
+                                            <p>
+                                                Player wins!
+                                            </p>
+                                        ) : (
+                                            <p>
+                                                Computer Wins!
+                                            </p>
+                                        )}
+                                    </div>
+                                ) : null}
+                                {tieAlert && !gameOver ? (
+                                    <div>
+                                        <p>
+                                            It's a tie!
+                                        </p>
+                                        <p>
+                                            Ties in a row: {`${tieCounter}`}
+                                        </p>
+                                        {tieCounter === 2 ? (
+                                            <p>
+                                                This is unlikely.
+                                            </p>
+                                        ) : tieCounter === 3 ? (
+                                            <p>
+                                                This is exceptionally unlikely.
+                                            </p>
+                                        ) : tieCounter === 4 ? (
+                                            <p>
+                                                Really?!
+                                            </p>
+                                        ) : tieCounter === 5 ? (
+                                            <p>
+                                                How are you doing this?
+                                            </p>
+                                        ) : tieCounter > 5 ? (
+                                            <p>
+                                                Congratulations, you're the only person seeing this probably ever.
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                ) : null}
+                            </div>
+                            <div className="endAnnouncements">
+                                { gameOver ? (
+                                    <div>
+                                        {(playerDeck.length + playerDiscard.length + playerInPlay.length) > (computerDeck.length + computerDiscard.length + computerInPlay.length) ? (
+                                            <div>
+                                                <p>
+                                                    Player wins the game!
+                                                </p>
+                                            </div>
+                                        ) : (playerDeck.length + playerDiscard.length + playerInPlay.length) < (computerDeck.length + computerDiscard.length + computerInPlay.length) ? (
+                                            <div>
+                                                <p>
+                                                    Computer wins the game!
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <p>
+                                                    It's all tied up!
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : null }
+                            </div>
+                        </div>
+                        <div className="centerMain">
+                        {(!turnAlert && !tieAlert && !gameOver && !pause) ? (
+                            <div className="option">
+                                <button onClick={(e) => {
+                                    advanceTurn(e)
+                                    }} className="mainButton">PLAY</button>
+                            </div>
+                        ) : turnAlert && !tieAlert && !gameOver && !pause ? (
+                            <div className="option">
+                                <button className="mainButton" onClick={endTurn}>CONTINUE</button>
+                            </div>
+                        ) : !turnAlert && tieAlert && !gameOver && !pause ? (
+                            <div className="option">
+                                <button className="mainButton" onClick={(e) => {
+                                    setTieAlert(false);
+                                    tieBreak(e);
+                                    }}>
+                                    TIEBREAK!
+                                </button>
+                            </div>
+                         ) : !turnAlert && !tieAlert && gameOver && !pause ? (
+                            <div className="option">
+                                <button className="mainButton" onClick={(e) => {
+                                    winCheck = true;
+                                    endDaGame(e);
+                                }}>END GAME</button>
+                            </div>
+                         ) : !turnAlert && !tieAlert && gameOver && !pause && ((playerDeck.length + playerDiscard.length + playerInPlay.length) === (computerDeck.length + computerDiscard.length + computerInPlay.length)) ? (
+                            <div className="option">
+                                <button className="mainButton" onClick={(e) => {
+                                    setGameOver(false);
+                                    suddenDeath(e);
+                                }}>SUDDEN DEATH!!!</button>
+                            </div>
+                         ) : (
+                            <div className="option">
+                                <button onClick={(e) => {
+                                    advanceTurn(e)
+                                    }} className="mainButtonDisabled">DISABLED</button>
+                            </div>
+                         )}
+                            <div className="option">
+                                <button onClick={handlePause} className="mainButton">PAUSE</button>
+                            </div>
+                            <div className="option">
+                                <button onClick={handleForfeit} className="mainButton">FORFEIT</button>
+                            </div>
+                            <div className="option">
+                                <button onClick={suspendGame} className="mainButton">SUSPEND GAME</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                { forfeit && (
+                    <>
+                    <div className="darkBG" onClick={() => setForfeit(false)} />
+                    <div className="centered">
+                        <div className="modal2">
+                            <div className="modalHeader">
+                                <h5 className="modalHeading"> Are You Sure?</h5>
+                            </div>
+                            <button 
+                                onClick={() => setForfeit(false)}  
+                                className="closeBtn">
+                                X
+                            </button>
+                            <div className="modalActions">
+                                <div className="actionsContainer">
+                                    <button
+                                        onClick={() => {
+                                            setGameOver(true)
+                                            setForfeit(false)
+                                        }}
+                                        className="submitBtn"
+                                    >
+                                        Forfeit
+                                    </button>
+                                    <button
+                                        onClick={() => setForfeit(false)}
+                                        className="cancelBtn"
+                                    >
+                                        Cancel
                                     </button>
                                 </div>
-                            ) : (
-                                <div>
-                                    <button className="mainButtonDisabled" disabled>DISABLED</button>
-                                </div>
-                            )}
-                        </div>
-                    ) : null}
-                    { gameOver ? (
-                        <div>
-                            {(playerDeck.length + playerDiscard.length + playerInPlay.length) > (computerDeck.length + computerDiscard.length + computerInPlay.length) ? (
-                                <div>
-                                    <p>
-                                        Player wins!
-                                    </p>
-                                    <button className="mainButton" onClick={(e) => {
-                                        winCheck = true;
-                                        endDaGame(e);
-                                    }}>END GAME</button>
-                                </div>
-                            ) : (playerDeck.length + playerDiscard.length + playerInPlay.length) < (computerDeck.length + computerDiscard.length + computerInPlay.length) ? (
-                                <div>
-                                    <p>
-                                        Computer wins!
-                                    </p>
-                                    <button className="mainButton" onClick={(e) => {
-                                        loseCheck = true;
-                                        endDaGame(e);
-                                    }}>END GAME</button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <p>
-                                        It's a tie!
-                                    </p>
-                                    <button className="mainButton" onClick={(e) => {
-                                        setGameOver(false);
-                                        suddenDeath(e);
-                                    }}>SUDDEN DEATH!!!</button>
-                                </div>
-                            )}
-                        </div>
-                    ) : null }
-                </div>
-                {(!turnAlert && !tieAlert && !gameOver && !pause) ? (
-                    <div>
-                        <button onClick={(e) => {
-                            advanceTurn(e)
-                            }} className="mainButton">ADVANCE TURN</button>
-                    </div>
-                ) : (
-                    <div>
-                        <button className="mainButtonDisabled" disabled>DISABLED</button>
-                    </div>
+                            </div>
+                        </div>    
+                    </div> 
+                    </>
                 )}
             </div>
-            <div className="playerPlayArea">
-                <div className="playerInPlayArea">PLAYER IN PLAY: {playerInPlay && playerInPlay.length > 0 ? (
-                    <div className="inPlay"><img className="cardImg" src={playerInPlay[playerInPlay.length - 1].cardArt}/>({`${playerInPlay.length}`})</div>
-                ) : null} 
-                </div>
-                <div className="playerDeckArea">PLAYER DECK: {playerDeckInfo[0] ? (
-                    <div className="deck"><img className="cardImg" src={playerDeckInfo[0].cardArt}/>({`${playerDeck.length}`})</div>
-                ) : null}
-                    </div>
-                <div className="playerDiscardPileArea">PLAYER DISCARD PILE: {playerDiscard && playerDiscard.length > 0 ? (
-                    <div className="discardPile"><img className="cardImg" src={playerDiscard[0].cardArt} />({`${playerDiscard.length}`})</div>
-                ) : null}
-                </div>
-                <div className="profileArea">
-                    <div className="profileImgBox">
-                        <img src={sessionUser.profileImg} />
-                    </div>
-                    <div className="profileNameBox">
-                        <p>{sessionUser.username}</p>
-                    </div>
-                </div>
-                <p>PLAYER PLAY AREA</p>
-            </div>
-            <div className="optionMenu">
-                <div className="option">
-                    <button onClick={handlePause} className="mainButton">PAUSE</button>
-                </div>
-                <div className="option">
-                    <button onClick={handleForfeit} className="mainButton">FORFEIT</button>
-                </div>
-                <div className="option">
-                    <button onClick={suspendGame} className="mainButton">SUSPEND GAME</button>
-                </div>
-            </div>
-
-            { forfeit && (
-                <>
-                <div className="darkBG" onClick={() => setForfeit(false)} />
-                <div className="centered">
-                    <div className="modal">
-                        <div className="modalHeader">
-                            <h5 className="modalHeading"> Are You Sure?</h5>
-                        </div>
-                        <button 
-                            onClick={() => setForfeit(false)}  
-                            className="closeBtn">
-                            X
-                        </button>
-                        <div className="modalActions">
-                        <div className="actionsContainer">
-							<button
-								onClick={() => {
-                                    setGameOver(true)
-                                    setForfeit(false)
-                                }}
-								className="submitBtn"
-							>
-								Forfeit
-							</button>
-							<button
-								onClick={() => setForfeit(false)}
-								className="cancelBtn"
-							>
-								Cancel
-							</button>
-						</div>
-                        </div>
-                    </div>    
-                </div> 
-                </>
-            )}
         </>
     )
 }

@@ -1,0 +1,138 @@
+.profileImgBox {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    background: white;
+    border-radius: 110px;
+    border: outset 10px red;
+    box-shadow: 5px 5px 5px black;
+}
+
+.profilePic {
+    width: 100%;
+    height: auto;
+}
+
+.cardPictureBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 122px;
+    height: 176px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
+    margin-top: 1px;
+    margin-bottom: 1px;
+
+}
+
+.cardImg {
+    width: 100%;
+    height: auto;
+}
+
+.announcementsBox {
+    background: #1c3528;
+    width: 400px;
+    height: 125px;
+    padding: 0 25px 25px 25px;
+    border-radius: 10px;
+    border: solid 5px #1e0d05;
+    box-shadow: 5px 5px 5px #0f1d16;
+    text-align: center;
+}
+
+.announcementsTitle {
+    margin-bottom: -3px;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.announcementsBox p {
+    line-height: 10px;
+}
+
+.tableContainer {
+    width: 40%;
+    height: 100%;
+    margin-left: 30%;
+    margin-right: 30%;
+    padding-top: 0.25%;
+    padding-bottom: 0.45%;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: solid 2px #1e0d05;
+    border-right: solid 2px #1e0d05;
+    background: #35654d;
+    text-align: center;
+}
+
+.timerContainer {
+    margin-left: 2%;
+    margin-top: 2%;
+    background: #1c3528;
+    width: 175px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: solid 5px #1e0d05;
+    box-shadow: 5px 5px 5px #0f1d16;
+    margin-top: 10%;
+}
+
+.playerPlayArea {
+    display: flex;
+    flex-direction: column;
+}
+
+.opponentPlayArea {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardSpace {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.infoSpace {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.announcementsBox {
+    display: flex;
+    flex-direction: column;
+}
+
+.centerMain {
+    display: flex;
+    flex-direction: column;
+}
+
+.gameTitle {
+    text-align: center;
+    text-decoration: underline;
+    padding-left: 9%;
+    padding-top: 5%;
+}
+
+.playArea {
+    background-image:url("../../assets/1000_F_124534065_ww9OXMx183M5wQ85WNQ0rnLyXvsQMg19.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.announcementsButton {
+    width: 50%;
+    margin-left: 25%;
+}
+
+.option {
+    margin-top: 10px;
+}

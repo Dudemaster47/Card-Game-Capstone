@@ -6,7 +6,7 @@ def seed_custom_decks():
     db.session.add(metroidDeck)
     db.session.commit()
     
-    marioDeck = CustomDeck(deck_name="Mario Deck", card_art="https://static.wikia.nocookie.net/mario/images/7/7a/1208px-Mushroom2.png/revision/latest/scale-to-width-down/1208?cb=20190607181634", cards_in_deck=card_list, user_id=3)
+    marioDeck = CustomDeck(deck_name="Mario Deck", card_art="https://dudemastersongbucket.s3.amazonaws.com/index.png", cards_in_deck=card_list, user_id=3)
     db.session.add(marioDeck)
     db.session.commit()
     

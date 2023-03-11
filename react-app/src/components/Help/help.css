@@ -1,0 +1,54 @@
+.helpWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.helpPage {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1%;
+}
+
+.section {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    background: rgb(52, 10, 17);
+    padding: 1%;
+    line-height: 0.5;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px black;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.section h2 {
+    text-decoration: underline;
+    margin-bottom: 2%;
+    margin-top: 5px;
+}
+
+.helpButton {
+    width: 20%;
+}
+
+.titleBlock {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    background: #1c3528;
+    padding: 1% 50px 1% 50px;
+    line-height: 0.5;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px black;
+    text-align: center;
+}
+
+.titleBlock h1 {
+    margin-top: 5px;
+    margin-bottom: 30px;
+    text-decoration: underline;
+
+}

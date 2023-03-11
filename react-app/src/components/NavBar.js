@@ -12,7 +12,7 @@ const NavBar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if(sessionUser.createdGames.length > 0){
+    if(sessionUser && sessionUser.createdGames.length > 0){
       const game = sessionUser.createdGames[0];
       const intlState = JSON.parse(localStorage.getItem('gameState'))
       if((intlState[0] !== game.id) || intlState[11]) {
@@ -67,7 +67,7 @@ const NavBar = () => {
           </div>
         )}
         <li className="navHeader"><span>CARD GAME APP</span></li>
-        {gameInProgCheck && sessionUser.createdGames[0] && sessionUser && (location.pathname !== `/games/${sessionUser.createdGames[0].id}`) ? (
+        {sessionUser && gameInProgCheck && sessionUser.createdGames[0] && sessionUser && (location.pathname !== `/games/${sessionUser.createdGames[0].id}`) ? (
         <li className="navTab" onClick={resumeGame}>
           <p>Resume Game In Progress</p>
         </li>

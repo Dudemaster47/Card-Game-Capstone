@@ -19,6 +19,10 @@
     padding: 0;
 }
 
+.homeOption {
+    margin-top: 10px;
+}
+
 .loginListButton {
     position: relative;
     display: flex;

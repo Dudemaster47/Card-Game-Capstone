@@ -8,15 +8,9 @@ function GameTable() {
     const game = sessionUser.createdGames[0];
     return (
         <>
-            <div>Timer Box</div>
-            <div>
-                <div>Game ID# {sessionUser.createdGames[0].id}</div>
-                <div>Time Limit: {sessionUser.createdGames[0].timer}</div>
-                <div>Game Type: {sessionUser.createdGames[0].gameType}</div>
-            </div>
             <div className="playArea">
-                <p>Play Area</p>
-                <p>Conditionally Renders Relevant Game Type</p>
+                {/* <p>Play Area</p>
+                <p>Conditionally Renders Relevant Game Type</p> */}
                 {game.gameType === "War" ? (
                     <War1P />
                 ) : null }

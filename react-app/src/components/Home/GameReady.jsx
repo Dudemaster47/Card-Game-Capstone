@@ -67,19 +67,46 @@ function GameReady() {
                     <div>Time Limit: {sessionUser.createdGames[0].timer}</div>
                     <div>Game Type: {sessionUser.createdGames[0].gameType}</div>
                 </div>
-                <Link to={`/games/${sessionUser.createdGames[0].id}`} className="mainButton">1P GAME START</Link>
-                <button onClick={notYetImplemented} className="mainButton">2P GAME HOST</button>
                 {gameInProgCheck ? (
-                    <button disabled className="mainButtonDisabled">DISABLED</button>
+                    <div className="homeOption">
+                        <button disabled className="mainButtonDisabled">DISABLED</button>
+                    </div>
                 ): (
-                    <button onClick={() => setIsOpen(true)} className="mainButton">GAME SETTINGS</button>
+                    <div className="homeOption">
+                        <Link to={`/games/${sessionUser.createdGames[0].id}`} className="mainButton">1P GAME START</Link>
+                    </div>
                 )}
                 {gameInProgCheck ? (
-                    <button disabled className="mainButtonDisabled">DISABLED</button>
+                    <div className="homeOption">
+                        <button disabled className="mainButtonDisabled">DISABLED</button>
+                    </div>
                 ): (
-                    <button onClick={() => setAreYouSure(true)} className="mainButton">DELETE GAME</button>
+                    <div className="homeOption">
+                        <button onClick={notYetImplemented} className="mainButton">2P GAME HOST</button>
+                    </div>
                 )}
-                <button onClick={help} className="mainButton">HELP</button>
+                {gameInProgCheck ? (
+                    <div className="homeOption">
+                        <button disabled className="mainButtonDisabled">DISABLED</button>
+                    </div>
+                ): (
+                    <div className="homeOption">
+                        <button onClick={() => setIsOpen(true)} className="mainButton">GAME SETTINGS</button>
+                    </div>
+                )}
+                {gameInProgCheck ? (
+                    <div className="homeOption">
+                        <button disabled className="mainButtonDisabled">DISABLED</button>
+                    </div>
+                ): (
+                    <div className="homeOption">
+                        <button onClick={() => setAreYouSure(true)} className="mainButton">DELETE GAME</button>
+                    </div>
+                )}
+                <div className="homeOption">
+                    <button onClick={help} className="mainButton">HELP</button>
+                </div>
+                
     
                 { isOpen && (
                     <GameSettingsModal 
@@ -92,7 +119,7 @@ function GameReady() {
                 <>
                 <div className="darkBG" onClick={() => setAreYouSure(false)} />
                 <div className="centered">
-                    <div className="modal">
+                    <div className="modal2">
                         <div className="modalHeader">
                             <h5 className="modalHeading"> Are You Sure?</h5>
                         </div>

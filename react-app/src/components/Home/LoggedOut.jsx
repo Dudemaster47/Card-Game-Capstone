@@ -10,11 +10,20 @@ function LoggedOut() {
 		email: guest[0]?.email,
 		password: "password",
 	};
+    const demoUser = guest && {
+        email: guest[2]?.email,
+        password: "password"
+    }
 
-    const handleClick = (e) => {
+    const handleClick1 = (e) => {
 		e.preventDefault();
 		return dispatch(login(guestUser.email, guestUser.password));
 	};
+
+    const handleClick2 = (e) => {
+        e.preventDefault();
+        return dispatch(login(demoUser.email, demoUser.password))
+    }
     return (
     <div className="loggedOutContainer">   
         <h2 className="loginBlurb">This is Card Games (better name pending)!! To continue, please:</h2>
@@ -26,9 +35,13 @@ function LoggedOut() {
                 <Link to='/login' className="mainButton">LOG IN</Link>
             </li>
             <li className="loginListButton">
-                <button onClick={handleClick} className="mainButton">CONTINUE AS GUEST</button>
+                <button onClick={handleClick1} className="mainButton">CONTINUE AS GUEST</button>
+            </li>
+            <li className="loginListButton">
+                <button onClick={handleClick2} className="mainButton">DEMO LOGIN</button>
             </li>
         </ul>
+        <p>NOTE: DEMO LOGIN IS DIFFERENT THAN GUEST. SEE HELP PAGE FOR MORE INFO.</p>
     </div>
     );
 

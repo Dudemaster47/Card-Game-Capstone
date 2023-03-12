@@ -154,7 +154,7 @@ function War1P() {
             setGameOver(true);
             gOBool = true;
         }
-        if (deck2.length === 0 && discard2 !== 0){
+        if (deck2.length === 0 && discard2.length !== 0){
             let shuffledDeck = [];
             shuffle(discard2, shuffledDeck);
             shuffledDeck = shuffledDeck.flat();
@@ -165,7 +165,7 @@ function War1P() {
                 discard2 = [];
             }
             
-        } else if (deck2.length === 0 && discard2 === 0){
+        } else if (deck2.length === 0 && discard2.length === 0){
             setGameOver(true);
             gOBool = true;
         }

@@ -17,7 +17,12 @@ function LoggedIn() {
 
     useEffect(() => {
         const userAndDeck = JSON.parse(localStorage.getItem('userAndDeck'))
-        if((userAndDeck[0] === sessionUser.id) && userAndDeck[1]){
+        if(userAndDeck){
+            if((userAndDeck[0] === sessionUser.id) && userAndDeck[1]){
+            } else {
+                const userAndDeckArray = [sessionUser.id, 0]
+                localStorage.setItem('userAndDeck', JSON.stringify(userAndDeckArray))
+            }
         } else {
             const userAndDeckArray = [sessionUser.id, 0]
             localStorage.setItem('userAndDeck', JSON.stringify(userAndDeckArray))

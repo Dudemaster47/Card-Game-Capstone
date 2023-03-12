@@ -15,9 +15,13 @@ const NavBar = () => {
     if(sessionUser && sessionUser.createdGames.length > 0){
       const game = sessionUser.createdGames[0];
       const intlState = JSON.parse(localStorage.getItem('gameState'))
-      if((intlState[0] !== game.id) || intlState[11]) {
-        if(intlState[1] < game.timer){
-          setGameInProgCheck(true);
+      if(intlState){
+        if((intlState[0] !== game.id) || intlState[11]) {
+          if(intlState[1] < game.timer){
+            setGameInProgCheck(true);
+          } else {
+            setGameInProgCheck(false);
+          }
         } else {
           setGameInProgCheck(false);
         }

@@ -26,15 +26,19 @@ function GameReady() {
     useEffect(() => {
           const game = sessionUser.createdGames[0];
           const intlState = JSON.parse(localStorage.getItem('gameState'))
-          if((intlState[0] !== game.id) || intlState[11]) {
-            if(intlState[1] < game.timer){
-              setGameInProgCheck(true);
-            } else {
-              setGameInProgCheck(false);
-            }
+          if (intlState){
+              if((intlState[0] !== game.id) || intlState[11]) {
+                if(intlState[1] < game.timer){
+                  setGameInProgCheck(true);
+                } else {
+                  setGameInProgCheck(false);
+                }
+              } else {
+                setGameInProgCheck(false);
+              } 
           } else {
             setGameInProgCheck(false);
-          } 
+          }
     }, [location, sessionUser])
 
     useEffect(() => {

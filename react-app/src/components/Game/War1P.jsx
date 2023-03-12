@@ -303,7 +303,7 @@ function War1P() {
 
         useEffect(() => {
             const intlState = JSON.parse(localStorage.getItem('gameState'))
-            if((intlState[0] !== gameId) || intlState[11]) {
+            if(!intlState || ((intlState[0] !== gameId) || intlState[11])) {
             } else {
                 setTimeLeft(intlState[1]);
                 setPlayerDeck(intlState[2]);

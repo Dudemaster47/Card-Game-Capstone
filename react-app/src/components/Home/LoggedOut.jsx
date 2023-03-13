@@ -5,8 +5,8 @@ import { login } from "../../store/session";
 function LoggedOut() {
     const dispatch = useDispatch();
     const guest = useSelector((state) => state.users.users);
-    const guestLogin = guest.filter(el => el.id === 1);
-    const demoLogin = guest.filter(el => el.id === 3);
+    const guestLogin = guest && guest.filter(el => el.id === 1);
+    const demoLogin = guest && guest.filter(el => el.id === 3);
     
     const guestUser = guest && {
 		email: guestLogin[0]?.email,

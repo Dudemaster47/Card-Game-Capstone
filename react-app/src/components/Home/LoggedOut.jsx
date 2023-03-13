@@ -4,14 +4,16 @@ import { login } from "../../store/session";
 
 function LoggedOut() {
     const dispatch = useDispatch();
-    const guest = useSelector((state) => state.users.users)
+    const guest = useSelector((state) => state.users.users);
+    const guestLogin = guest.filter(el => el.id === 1);
+    const demoLogin = guest.filter(el => el.id === 3);
     
     const guestUser = guest && {
-		email: guest[0]?.email,
+		email: guestLogin[0]?.email,
 		password: "password",
 	};
     const demoUser = guest && {
-        email: guest[2]?.email,
+        email: demoLogin[0]?.email,
         password: "password"
     }
 

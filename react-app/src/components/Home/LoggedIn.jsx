@@ -3,6 +3,7 @@ import { createGameThunk } from "../../store/games";
 import { useEffect, useState } from "react";
 import { refreshSessionuser } from "../../store/session";
 import { useHistory } from "react-router-dom";
+import { editUserThunk } from "../../store/users";
 
 function LoggedIn() {
     const history = useHistory();
@@ -14,6 +15,7 @@ function LoggedIn() {
         timer: "300",
         game_type: "War"
     }
+    const defaultImg = 'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'
 
     useEffect(() => {
         const userAndDeck = JSON.parse(localStorage.getItem('userAndDeck'))
@@ -26,6 +28,13 @@ function LoggedIn() {
         } else {
             const userAndDeckArray = [sessionUser.id, 0]
             localStorage.setItem('userAndDeck', JSON.stringify(userAndDeckArray))
+        }
+    }, [])
+
+    useEffect(() => {
+        if(!sessionUser.profileImg){
+            let editedUser = { id: sessionUser.id, username: sessionUser.username, email: sessionUser.email, profile_img: defaultImg, wins: sessionUser.wins, losses: sessionUser.losses }
+            dispatch(editUserThunk(editedUser));
         }
     }, [])
 

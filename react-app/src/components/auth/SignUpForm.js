@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../store/session';
 import { getAllUsersThunk } from '../../store/users';
+import { editUserThunk } from '../../store/users';
 
 const SignUpForm = () => {
   const [errors, setErrors] = useState([]);
@@ -12,6 +13,8 @@ const SignUpForm = () => {
   const [repeatPassword, setRepeatPassword] = useState('');
   const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
+  
+  
 
   const onSignUp = async (e) => {
     e.preventDefault();

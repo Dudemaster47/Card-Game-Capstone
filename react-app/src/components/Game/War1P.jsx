@@ -298,7 +298,9 @@ function War1P() {
             e.preventDefault();
             setForfeit(true);
             setPlayerDeck([])
-            setComputerDeck(["dummy"])
+            setPlayerDiscard([])
+            setPlayerInPlay([])
+            setComputerDeck(["dummy", "dummy"])
         }
 
         useEffect(() => {
@@ -571,14 +573,21 @@ function War1P() {
                                     TIEBREAK!
                                 </button>
                             </div>
-                         ) : !turnAlert && !tieAlert && gameOver && !pause ? (
+                         ) : gameOver && ((playerDeck.length + playerDiscard.length + playerInPlay.length) > (computerDeck.length + computerDiscard.length + computerInPlay.length)) ? (
                             <div className="option">
                                 <button className="mainButton" onClick={(e) => {
                                     winCheck = true;
                                     endDaGame(e);
                                 }}>END GAME</button>
                             </div>
-                         ) : !turnAlert && !tieAlert && gameOver && !pause && ((playerDeck.length + playerDiscard.length + playerInPlay.length) === (computerDeck.length + computerDiscard.length + computerInPlay.length)) ? (
+                         ) : gameOver && ((playerDeck.length + playerDiscard.length + playerInPlay.length) < (computerDeck.length + computerDiscard.length + computerInPlay.length)) ? (
+                            <div className="option">
+                                <button className="mainButton" onClick={(e) => {
+                                    loseCheck = true;
+                                    endDaGame(e);
+                                }}>END GAME</button>
+                            </div>
+                         ) :!turnAlert && !tieAlert && gameOver && !pause && ((playerDeck.length + playerDiscard.length + playerInPlay.length) === (computerDeck.length + computerDiscard.length + computerInPlay.length)) ? (
                             <div className="option">
                                 <button className="mainButton" onClick={(e) => {
                                     setGameOver(false);

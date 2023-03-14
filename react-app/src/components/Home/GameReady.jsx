@@ -50,7 +50,8 @@ function GameReady() {
         setExists(false);
         const gameState = ["", "", "", "", "", "", "", "", "", "", "", ""]
         localStorage.setItem('gameState', JSON.stringify([gameState]))
-        return dispatch(deleteGameThunk(game));
+        dispatch(deleteGameThunk(game));
+        return dispatch(refreshSessionuser(sessionUser.id))
     }
 
     const notYetImplemented = (e) => {

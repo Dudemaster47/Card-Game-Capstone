@@ -47,7 +47,8 @@ function LoggedIn() {
         if (!gameExists){   
             const gameState = ["", "", "", "", "", "", "", "", "", "", "", ""]
             localStorage.setItem('gameState', JSON.stringify([gameState]))
-            return dispatch(createGameThunk(gameCreator));
+            dispatch(createGameThunk(gameCreator));
+            return dispatch(refreshSessionuser(sessionUser.id));
         } else {
             window.alert("Can't have more than one active game at a time!")
         }

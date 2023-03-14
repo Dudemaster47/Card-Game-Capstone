@@ -17,14 +17,19 @@ function GameSettingsModal({setIsOpen, game, sendDataToHome}) {
 			timer: timeLimit,
 			game_type: gameType,
 		};
-		let data = await dispatch(editGameThunk(editedGame));
-		if (data) {
-			setErrors(data);
+		if (editedGame && editedGame.game_type !== "War"){
+			setErrors([`${editedGame.game_type} is not yet implemented.`]);
 		} else {
-			setIsOpen(false)
-			sendDataToHome(true)
+			let data = await dispatch(editGameThunk(editedGame));
+			if (data) {
+				setErrors(data);
+			} else {
+				setIsOpen(false)
+				sendDataToHome(true)
+			}
 		}
 	};
+
     return (
         <>
         <div className="darkBG" onClick={() => setIsOpen(false)} />

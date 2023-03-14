@@ -65,3 +65,4 @@ Listen, I wanna impress by going above and beyond but god a tad bogged down duri
 - Implement P2P chat ingame
 - Implement Better Card Games- Gin Rummy and Blackjack are on the table. It's unlikely that Gin Rummy will have a 1P mode, but Blackjack can.
 - Yassify the website. It's pretty barebones, tbh. Needs more clip art and animated gifs.
+- Responsive design also. I need to do that.

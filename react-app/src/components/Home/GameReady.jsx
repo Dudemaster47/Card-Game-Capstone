@@ -4,6 +4,9 @@ import GameSettingsModal from "../Modals/GameSettingsModal";
 import { useState, useEffect } from "react";
 import { refreshSessionuser } from "../../store/session";
 import { Link, useLocation, useHistory } from "react-router-dom";
+import { editUserThunk } from "../../store/users";
+import { getAllUsersThunk } from "../../store/users";
+
 
 function GameReady() {
     const sessionUser = useSelector((state) => state.session.user);
@@ -54,6 +57,19 @@ function GameReady() {
         return dispatch(refreshSessionuser(sessionUser.id))
     }
 
+    const forfeitGame = (e) => {
+        e.preventDefault();
+        setExists(false);
+        const gameState = ["", "", "", "", "", "", "", "", "", "", "", ""]
+        localStorage.setItem('gameState', JSON.stringify([gameState]))
+        let losses = (sessionUser.losses + 1)
+        let editedUser = { id: sessionUser.id, username: sessionUser.username, email: sessionUser.email, profile_img: sessionUser.profileImg, wins: sessionUser.wins, losses: losses }
+        dispatch(editUserThunk(editedUser));
+        dispatch(deleteGameThunk(game));
+        dispatch(refreshSessionuser(sessionUser.id))
+        dispatch(getAllUsersThunk())
+    }
+
     const notYetImplemented = (e) => {
         e.preventDefault();
         window.alert("Not yet implemented!")
@@ -74,34 +90,26 @@ function GameReady() {
                 </div>
                 {gameInProgCheck ? (
                     <div className="homeOption">
-                        <button disabled className="mainButtonDisabled">DISABLED</button>
+                    <Link to={`/games/${sessionUser.createdGames[0].id}`} className="mainButton">RESUME GAME</Link>
                     </div>
                 ): (
                     <div className="homeOption">
                         <Link to={`/games/${sessionUser.createdGames[0].id}`} className="mainButton">1P GAME START</Link>
                     </div>
                 )}
-                {gameInProgCheck ? (
-                    <div className="homeOption">
-                        <button disabled className="mainButtonDisabled">DISABLED</button>
-                    </div>
-                ): (
+                {gameInProgCheck ? null : (
                     <div className="homeOption">
                         <button onClick={notYetImplemented} className="mainButton">2P GAME HOST</button>
                     </div>
                 )}
-                {gameInProgCheck ? (
-                    <div className="homeOption">
-                        <button disabled className="mainButtonDisabled">DISABLED</button>
-                    </div>
-                ): (
+                {gameInProgCheck ? null : (
                     <div className="homeOption">
                         <button onClick={() => setIsOpen(true)} className="mainButton">GAME SETTINGS</button>
                     </div>
                 )}
                 {gameInProgCheck ? (
                     <div className="homeOption">
-                        <button disabled className="mainButtonDisabled">DISABLED</button>
+                        <button onClick={() => setAreYouSure(true)} className="mainButton">FORFEIT GAME</button>
                     </div>
                 ): (
                     <div className="homeOption">
@@ -135,15 +143,27 @@ function GameReady() {
                         </button>
                         <div className="modalActions">
                         <div className="actionsContainer">
-							<button
-								onClick={(e) => {
-                                    deleteGame(e)
-                                    setAreYouSure(false)
-                                }}
-								className="submitBtn"
-							>
-								Delete
-							</button>
+                            {gameInProgCheck ? (
+                                 <button
+                                 onClick={(e) => {
+                                     forfeitGame(e)
+                                     setAreYouSure(false)
+                                 }}
+                                 className="submitBtn"
+                             >
+                                 Forfeit
+                             </button>
+                            ) : (
+                                <button
+                                    onClick={(e) => {
+                                        deleteGame(e)
+                                        setAreYouSure(false)
+                                    }}
+                                    className="submitBtn"
+                                >
+                                    Delete
+                                </button>
+                            )}
 							<button
 								onClick={() => setAreYouSure(false)}
 								className="cancelBtn"

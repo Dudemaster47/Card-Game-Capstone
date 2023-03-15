@@ -152,6 +152,7 @@ function War1P() {
   
         } else if (deck1.length === 0 && discard1.length === 0){
             setGameOver(true);
+            setPause(true);
             gOBool = true;
         }
         if (deck2.length === 0 && discard2.length !== 0){
@@ -167,6 +168,7 @@ function War1P() {
             
         } else if (deck2.length === 0 && discard2.length === 0){
             setGameOver(true);
+            setPause(true);
             gOBool = true;
         }
         return [deck1, deck2, discard1, discard2, gOBool];
@@ -297,10 +299,15 @@ function War1P() {
         const handleForfeit = (e) => {
             e.preventDefault();
             setForfeit(true);
-            setPlayerDeck([])
-            setPlayerDiscard([])
-            setPlayerInPlay([])
-            setComputerDeck(["dummy", "dummy"])
+            setTurnAlert(false);
+            setTieAlert(false);
+            setPause(true);
+            setPlayerDeck(["dummy"]);
+            setPlayerDiscard([]);
+            setPlayerInPlay([]);
+            setComputerInPlay([]);
+            setComputerDiscard([]);
+            setComputerDeck(["dummy", "dummy2", "dummy3"])
         }
 
         useEffect(() => {
@@ -596,13 +603,18 @@ function War1P() {
                             </div>
                          ) : (
                             <div className="option">
-                                <button onClick={(e) => {
-                                    advanceTurn(e)
-                                    }} className="mainButtonDisabled">DISABLED</button>
+                                <button disabled className="mainButtonDisabled">PAUSED</button>
                             </div>
                          )}
                             <div className="option">
-                                <button onClick={handlePause} className="mainButton">PAUSE</button>
+                                {!pause && !gameOver ? (
+                                    <button onClick={handlePause} className="mainButton">PAUSE</button>
+                                ) : pause && !gameOver ? (
+                                    <button onClick={handlePause} className="mainButton">UNPAUSE</button>
+                                ) : gameOver ? (
+                                    <button disabled className="mainButtonDisabled">PAUSE</button>
+
+                                ) : null }
                             </div>
                             <div className="option">
                                 <button onClick={handleForfeit} className="mainButton">FORFEIT</button>
@@ -617,14 +629,20 @@ function War1P() {
 
                 { forfeit && (
                     <>
-                    <div className="darkBG" onClick={() => setForfeit(false)} />
+                    <div className="darkBG" onClick={() => {
+                        setForfeit(false)
+                        setPause(false)
+                    }} />
                     <div className="centered">
                         <div className="modal2">
                             <div className="modalHeader">
                                 <h5 className="modalHeading"> Are You Sure?</h5>
                             </div>
                             <button 
-                                onClick={() => setForfeit(false)}  
+                                onClick={() => {
+                                    setForfeit(false)
+                                    setPause(false)
+                                }}
                                 className="closeBtn">
                                 X
                             </button>
@@ -640,7 +658,10 @@ function War1P() {
                                         Forfeit
                                     </button>
                                     <button
-                                        onClick={() => setForfeit(false)}
+                                        onClick={() => {
+                                            setForfeit(false)
+                                            setPause(false)
+                                        }}
                                         className="cancelBtn"
                                     >
                                         Cancel
